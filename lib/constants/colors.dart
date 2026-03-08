@@ -7,7 +7,7 @@ class AppColors {
 
   // ── Background ─────────────────────────────────────────────────────────────
   /// Main page background – deep dark navy.
-  static const Color background = Color(0xFF1A2035);
+  static const Color background = Color(0xFF0D0F1A);
 
   /// Slightly lighter surface for cards / nav.
   static const Color surface = Color(0xFF1E2540);
