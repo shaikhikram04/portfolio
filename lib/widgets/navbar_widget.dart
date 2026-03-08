@@ -27,14 +27,33 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
 
   String _hoveredLink = '';
 
+  /// Maps screen width to a sensible horizontal padding:
+  ///
+  /// | Width          | Padding |
+  /// |----------------|---------|
+  /// | < 600          |  16 px  |
+  /// | 600 – 899      |  32 px  |
+  /// | 900 – 1199     |  60 px  |
+  /// | 1200 – 1599    |  100 px |
+  /// | ≥ 1600         |  140 px |
+  double _responsiveHPadding(double width) {
+    if (width < 600) return 26;
+    if (width < 900) return 42;
+    if (width < 1200) return 80;
+    if (width < 1600) return 160;
+    return 240;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final hPadding = _responsiveHPadding(width);
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 18),
       decoration: BoxDecoration(
         // Subtle frosted-glass strip at the top
         color: AppColors.background.withValues(alpha: 0.0),
-        
       ),
       child: Row(
         children: [
@@ -44,8 +63,6 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
           // ── Nav Links (desktop) ────────────────────────────────────────
           LayoutBuilder(
             builder: (context, constraints) {
-              // Always visible in the parent scroll view; use MediaQuery here.
-              final width = MediaQuery.of(context).size.width;
               if (width >= 900) {
                 return Row(
                   children: _sections

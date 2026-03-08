@@ -11,22 +11,22 @@ class AppTextStyles {
   const AppTextStyles._();
 
   // ── Logo ─────────────────────────────────────────────────────────────────
-  static TextStyle get logo => GoogleFonts.notoSansArabic(
+  static TextStyle get logo => GoogleFonts.robotoMono(
         fontSize: 22,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w700,
         color: AppColors.primary,
         letterSpacing: 1.2,
       );
 
   // ── Navigation ───────────────────────────────────────────────────────────
-  static TextStyle get navLink => GoogleFonts.notoSansArabic(
+  static TextStyle get navLink => GoogleFonts.notoSansKaithi(
         fontSize: 14,
-        fontWeight: FontWeight.w500,
-        color: AppColors.textSecondary,
+        fontWeight: FontWeight.w400,
+        color: AppColors.textSecondary.withValues(alpha: 0.6),
         letterSpacing: 0.3,
       );
 
-  static TextStyle get navLinkActive => GoogleFonts.notoSansArabic(
+  static TextStyle get navLinkActive => GoogleFonts.notoSansKaithi(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: AppColors.primary,
@@ -34,7 +34,7 @@ class AppTextStyles {
       );
 
   // ── Badge / Pill ─────────────────────────────────────────────────────────
-  static TextStyle get badge => GoogleFonts.notoSansArabic(
+  static TextStyle get badge => GoogleFonts.notoSansKaithi(
         fontSize: 13,
         fontWeight: FontWeight.w500,
         color: AppColors.textSecondary,
@@ -43,7 +43,7 @@ class AppTextStyles {
 
   // ── Hero Heading ─────────────────────────────────────────────────────────
   /// "Hi, I'm " – white portion of the main headline.
-  static TextStyle get heroHeadingBase => GoogleFonts.notoSansArabic(
+  static TextStyle get heroHeadingBase => GoogleFonts.notoSansKaithi(
         fontSize: 56,
         fontWeight: FontWeight.w800,
         color: AppColors.textPrimary,
@@ -52,7 +52,7 @@ class AppTextStyles {
       );
 
   /// "Ikram" – teal accent in the headline.
-  static TextStyle get heroHeadingTeal => GoogleFonts.notoSansArabic(
+  static TextStyle get heroHeadingTeal => GoogleFonts.notoSansKaithi(
         fontSize: 56,
         fontWeight: FontWeight.w800,
         color: AppColors.primary,
@@ -61,7 +61,7 @@ class AppTextStyles {
       );
 
   /// "Shaikh" – blue-purple gradient mask base (white so ShaderMask shows).
-  static TextStyle get heroHeadingGradient => GoogleFonts.notoSansArabic(
+  static TextStyle get heroHeadingGradient => GoogleFonts.notoSansKaithi(
         fontSize: 56,
         fontWeight: FontWeight.w800,
         color: Colors.white,
@@ -71,7 +71,7 @@ class AppTextStyles {
 
   // ── Animated Subtitle ────────────────────────────────────────────────────
   /// "I'm a " static prefix.
-  static TextStyle get subtitleBase => GoogleFonts.notoSansArabic(
+  static TextStyle get subtitleBase => GoogleFonts.notoSansKaithi(
         fontSize: 22,
         fontWeight: FontWeight.w500,
         color: AppColors.textSecondary,
@@ -79,7 +79,7 @@ class AppTextStyles {
       );
 
   /// Typed animated portion – teal highlight.
-  static TextStyle get subtitleAnimated => GoogleFonts.notoSansArabic(
+  static TextStyle get subtitleAnimated => GoogleFonts.notoSansKaithi(
         fontSize: 22,
         fontWeight: FontWeight.w600,
         color: AppColors.primary,
@@ -87,7 +87,7 @@ class AppTextStyles {
       );
 
   // ── Body / Description ───────────────────────────────────────────────────
-  static TextStyle get bodyDescription => GoogleFonts.notoSansArabic(
+  static TextStyle get bodyDescription => GoogleFonts.notoSansKaithi(
         fontSize: 15,
         fontWeight: FontWeight.w400,
         color: AppColors.textMuted,
@@ -96,14 +96,14 @@ class AppTextStyles {
       );
 
   // ── Buttons ──────────────────────────────────────────────────────────────
-  static TextStyle get buttonPrimary => GoogleFonts.notoSansArabic(
+  static TextStyle get buttonPrimary => GoogleFonts.notoSansKaithi(
         fontSize: 14,
         fontWeight: FontWeight.w600,
         color: AppColors.background,
         letterSpacing: 0.3,
       );
 
-  static TextStyle get buttonOutlined => GoogleFonts.notoSansArabic(
+  static TextStyle get buttonOutlined => GoogleFonts.notoSansKaithi(
         fontSize: 14,
         fontWeight: FontWeight.w500,
         color: AppColors.textPrimary,
