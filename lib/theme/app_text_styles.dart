@@ -1,0 +1,112 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../constants/colors.dart';
+
+/// Centralised text-style definitions.
+///
+/// All styles are derived from the [Poppins] font family (body / UI) and
+/// [Fira Code] (monospace / code snippets).  Import this class wherever you
+/// need a text style rather than constructing inline [TextStyle]s.
+class AppTextStyles {
+  const AppTextStyles._();
+
+  // ── Logo ─────────────────────────────────────────────────────────────────
+  static TextStyle get logo => GoogleFonts.notoSansArabic(
+        fontSize: 22,
+        fontWeight: FontWeight.w800,
+        color: AppColors.primary,
+        letterSpacing: 1.2,
+      );
+
+  // ── Navigation ───────────────────────────────────────────────────────────
+  static TextStyle get navLink => GoogleFonts.notoSansArabic(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textSecondary,
+        letterSpacing: 0.3,
+      );
+
+  static TextStyle get navLinkActive => GoogleFonts.notoSansArabic(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: AppColors.primary,
+        letterSpacing: 0.3,
+      );
+
+  // ── Badge / Pill ─────────────────────────────────────────────────────────
+  static TextStyle get badge => GoogleFonts.notoSansArabic(
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textSecondary,
+        letterSpacing: 0.5,
+      );
+
+  // ── Hero Heading ─────────────────────────────────────────────────────────
+  /// "Hi, I'm " – white portion of the main headline.
+  static TextStyle get heroHeadingBase => GoogleFonts.notoSansArabic(
+        fontSize: 56,
+        fontWeight: FontWeight.w800,
+        color: AppColors.textPrimary,
+        height: 1.15,
+        letterSpacing: -1.0,
+      );
+
+  /// "Ikram" – teal accent in the headline.
+  static TextStyle get heroHeadingTeal => GoogleFonts.notoSansArabic(
+        fontSize: 56,
+        fontWeight: FontWeight.w800,
+        color: AppColors.primary,
+        height: 1.15,
+        letterSpacing: -1.0,
+      );
+
+  /// "Shaikh" – blue-purple gradient mask base (white so ShaderMask shows).
+  static TextStyle get heroHeadingGradient => GoogleFonts.notoSansArabic(
+        fontSize: 56,
+        fontWeight: FontWeight.w800,
+        color: Colors.white,
+        height: 1.15,
+        letterSpacing: -1.0,
+      );
+
+  // ── Animated Subtitle ────────────────────────────────────────────────────
+  /// "I'm a " static prefix.
+  static TextStyle get subtitleBase => GoogleFonts.notoSansArabic(
+        fontSize: 22,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textSecondary,
+        height: 1.4,
+      );
+
+  /// Typed animated portion – teal highlight.
+  static TextStyle get subtitleAnimated => GoogleFonts.notoSansArabic(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
+        color: AppColors.primary,
+        height: 1.4,
+      );
+
+  // ── Body / Description ───────────────────────────────────────────────────
+  static TextStyle get bodyDescription => GoogleFonts.notoSansArabic(
+        fontSize: 15,
+        fontWeight: FontWeight.w400,
+        color: AppColors.textMuted,
+        height: 1.7,
+        letterSpacing: 0.1,
+      );
+
+  // ── Buttons ──────────────────────────────────────────────────────────────
+  static TextStyle get buttonPrimary => GoogleFonts.notoSansArabic(
+        fontSize: 14,
+        fontWeight: FontWeight.w600,
+        color: AppColors.background,
+        letterSpacing: 0.3,
+      );
+
+  static TextStyle get buttonOutlined => GoogleFonts.notoSansArabic(
+        fontSize: 14,
+        fontWeight: FontWeight.w500,
+        color: AppColors.textPrimary,
+        letterSpacing: 0.3,
+      );
+}

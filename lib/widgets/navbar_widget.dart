@@ -1,0 +1,268 @@
+import 'package:flutter/material.dart';
+import '../constants/colors.dart';
+import '../theme/app_text_styles.dart';
+
+/// Responsive top navigation bar.
+///
+/// On wide screens (≥ 900 px) it shows the full link row.
+/// On narrow screens it collapses to a hamburger menu.
+class PortfolioNavBar extends StatefulWidget {
+  const PortfolioNavBar({super.key, this.activeSection = 'Home'});
+
+  final String activeSection;
+
+  @override
+  State<PortfolioNavBar> createState() => _PortfolioNavBarState();
+}
+
+class _PortfolioNavBarState extends State<PortfolioNavBar> {
+  static const List<String> _sections = [
+    'Home',
+    'About',
+    'Projects',
+    'Skills',
+    'Experience',
+    'Contact',
+  ];
+
+  String _hoveredLink = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 18),
+      decoration: BoxDecoration(
+        // Subtle frosted-glass strip at the top
+        color: AppColors.background.withValues(alpha: 0.0),
+        
+      ),
+      child: Row(
+        children: [
+          // ── Logo ───────────────────────────────────────────────────────
+          _LogoText(),
+          const Spacer(),
+          // ── Nav Links (desktop) ────────────────────────────────────────
+          LayoutBuilder(
+            builder: (context, constraints) {
+              // Always visible in the parent scroll view; use MediaQuery here.
+              final width = MediaQuery.of(context).size.width;
+              if (width >= 900) {
+                return Row(
+                  children: _sections
+                      .map((s) => _NavLink(
+                            label: s,
+                            isActive: widget.activeSection == s,
+                            isHovered: _hoveredLink == s,
+                            onHoverChange: (hov) => setState(
+                              () => _hoveredLink = hov ? s : '',
+                            ),
+                          ))
+                      .toList(),
+                );
+              }
+              // Hamburger for smaller screens
+              return IconButton(
+                icon: const Icon(Icons.menu_rounded,
+                    color: AppColors.textSecondary),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+}
+
+
+// ── Public drawer ────────────────────────────────────────────────────────────
+
+/// Side drawer shown on narrow screens when the hamburger is tapped.
+class PortfolioDrawer extends StatelessWidget {
+  const PortfolioDrawer({super.key, this.activeSection = 'Home'});
+
+  final String activeSection;
+
+  static const List<String> _sections = [
+    'Home',
+    'About',
+    'Projects',
+    'Skills',
+    'Experience',
+    'Contact',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      backgroundColor: AppColors.surface,
+      width: 260,
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // ── Drawer header ────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+              child: _LogoText(),
+            ),
+            Divider(
+              color: AppColors.border,
+              height: 1,
+              thickness: 1,
+            ),
+            const SizedBox(height: 12),
+
+            // ── Nav items ────────────────────────────────────────────
+            ..._sections.map(
+              (s) => _DrawerNavItem(
+                label: s,
+                isActive: activeSection == s,
+                onTap: () => Navigator.pop(context),
+              ),
+            ),
+
+            const Spacer(),
+
+            // ── Footer ───────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+              child: Text(
+                '© 2025 Ikram Shaikh',
+                style: AppTextStyles.navLink.copyWith(
+                  fontSize: 11,
+                  color: AppColors.textMuted,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Single row item inside [PortfolioDrawer].
+class _DrawerNavItem extends StatefulWidget {
+  const _DrawerNavItem({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  @override
+  State<_DrawerNavItem> createState() => _DrawerNavItemState();
+}
+
+class _DrawerNavItemState extends State<_DrawerNavItem> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final highlighted = widget.isActive || _hovered;
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: highlighted
+                ? AppColors.primary.withValues(alpha: 0.10)
+                : Colors.transparent,
+          ),
+          child: Row(
+            children: [
+              // Active / hover indicator bar
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                width: 3,
+                height: 18,
+                margin: const EdgeInsets.only(right: 14),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: highlighted ? AppColors.primary : Colors.transparent,
+                ),
+              ),
+              Text(
+                widget.label,
+                style: highlighted
+                    ? AppTextStyles.navLinkActive
+                    : AppTextStyles.navLink,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Private sub-widgets ───────────────────────────────────────────────────────
+
+class _LogoText extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: 'IS',
+            style: AppTextStyles.logo,
+          ),
+          TextSpan(
+            text: '.',
+            style: AppTextStyles.logo.copyWith(color: AppColors.primary),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _NavLink extends StatelessWidget {
+  const _NavLink({
+    required this.label,
+    required this.isActive,
+    required this.isHovered,
+    required this.onHoverChange,
+  });
+
+  final String label;
+  final bool isActive;
+  final bool isHovered;
+  final ValueChanged<bool> onHoverChange;
+
+  @override
+  Widget build(BuildContext context) {
+    final highlighted = isActive || isHovered;
+    return MouseRegion(
+      onEnter: (_) => onHoverChange(true),
+      onExit: (_) => onHoverChange(false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {},
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 180),
+            style: highlighted
+                ? AppTextStyles.navLinkActive
+                : AppTextStyles.navLink,
+            child: Text(label),
+          ),
+        ),
+      ),
+    );
+  }
+}
