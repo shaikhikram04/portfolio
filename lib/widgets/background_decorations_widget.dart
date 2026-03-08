@@ -41,27 +41,35 @@ class BackgroundDecorations extends StatelessWidget {
           ),
         ),
 
-        // ── 3. Floating decorative icons ────────────────────────────────
+        // ── 3. Floating decorative icons (each with a unique phase) ──────
 
-        // Code brackets – top-right corner
+        // Code brackets – top-right
         Positioned(
           top: 120,
           right: 120,
-          child: _DecorIcon(
+          child: _FloatingIcon(
             icon: Icons.code_rounded,
             size: 48,
             opacity: 0.22,
+            phase: 0.0,
+            floatHeight: 14,
+            rotationRange: 0.12,
+            duration: const Duration(milliseconds: 3200),
           ),
         ),
 
-        // Layers / stack – top-left corner
+        // Layers / stack – top-left
         Positioned(
           top: 120,
           left: 90,
-          child: _DecorIcon(
+          child: _FloatingIcon(
             icon: FontAwesomeIcons.layerGroup,
             size: 38,
             opacity: 0.20,
+            phase: 0.3,
+            floatHeight: 10,
+            rotationRange: 0.08,
+            duration: const Duration(milliseconds: 2800),
           ),
         ),
 
@@ -69,10 +77,14 @@ class BackgroundDecorations extends StatelessWidget {
         Positioned(
           bottom: 160,
           left: 120,
-          child: _DecorIcon(
+          child: _FloatingIcon(
             icon: Icons.electric_bolt_rounded,
             size: 42,
             opacity: 0.18,
+            phase: 0.6,
+            floatHeight: 12,
+            rotationRange: 0.10,
+            duration: const Duration(milliseconds: 3600),
           ),
         ),
 
@@ -80,38 +92,93 @@ class BackgroundDecorations extends StatelessWidget {
         Positioned(
           bottom: 210,
           right: 140,
-          child: _DecorIcon(
+          child: _FloatingIcon(
             icon: Icons.desktop_mac_rounded,
             size: 42,
             opacity: 0.18,
+            phase: 0.15,
+            floatHeight: 11,
+            rotationRange: 0.07,
+            duration: const Duration(milliseconds: 3000),
           ),
         ),
 
-        // ── 4. Scatter dots ─────────────────────────────────────────────
+        // ── 4. Scatter dots (floating, each with unique phase) ───────────
         const Positioned(
           top: 230,
           left: 210,
-          child: _Dot(),
+          child: _FloatingDot(size: 4, phase: 0.0, duration: Duration(milliseconds: 2600)),
         ),
         const Positioned(
           top: 340,
           right: 220,
-          child: _Dot(),
+          child: _FloatingDot(size: 4, phase: 0.5, duration: Duration(milliseconds: 3100)),
         ),
         const Positioned(
           bottom: 260,
           left: 300,
-          child: _Dot(),
+          child: _FloatingDot(size: 4, phase: 0.2, duration: Duration(milliseconds: 2900)),
         ),
         const Positioned(
           top: 160,
           left: 440,
-          child: _Dot(size: 3),
+          child: _FloatingDot(size: 3, phase: 0.75, duration: Duration(milliseconds: 3400)),
         ),
         const Positioned(
           bottom: 200,
           right: 320,
-          child: _Dot(size: 3),
+          child: _FloatingDot(size: 3, phase: 0.4, duration: Duration(milliseconds: 2700)),
+        ),
+        // Extra dots – spread across the canvas
+        const Positioned(
+          top: 80,
+          left: 320,
+          child: _FloatingDot(size: 3, phase: 0.1, duration: Duration(milliseconds: 3200)),
+        ),
+        const Positioned(
+          top: 80,
+          right: 400,
+          child: _FloatingDot(size: 4, phase: 0.65, duration: Duration(milliseconds: 2500)),
+        ),
+        const Positioned(
+          top: 200,
+          right: 160,
+          child: _FloatingDot(size: 3, phase: 0.35, duration: Duration(milliseconds: 3700)),
+        ),
+        const Positioned(
+          top: 420,
+          left: 140,
+          child: _FloatingDot(size: 5, phase: 0.85, duration: Duration(milliseconds: 2800)),
+        ),
+        const Positioned(
+          top: 480,
+          right: 100,
+          child: _FloatingDot(size: 3, phase: 0.55, duration: Duration(milliseconds: 3300)),
+        ),
+        const Positioned(
+          top: 480,
+          left: 520,
+          child: _FloatingDot(size: 4, phase: 0.22, duration: Duration(milliseconds: 2950)),
+        ),
+        const Positioned(
+          bottom: 380,
+          left: 180,
+          child: _FloatingDot(size: 3, phase: 0.7, duration: Duration(milliseconds: 3550)),
+        ),
+        const Positioned(
+          bottom: 380,
+          right: 240,
+          child: _FloatingDot(size: 5, phase: 0.45, duration: Duration(milliseconds: 2650)),
+        ),
+        const Positioned(
+          bottom: 100,
+          left: 420,
+          child: _FloatingDot(size: 3, phase: 0.9, duration: Duration(milliseconds: 3050)),
+        ),
+        const Positioned(
+          bottom: 80,
+          right: 160,
+          child: _FloatingDot(size: 4, phase: 0.15, duration: Duration(milliseconds: 2750)),
         ),
       ],
     );
@@ -148,45 +215,150 @@ class _GridPainter extends CustomPainter {
   bool shouldRepaint(covariant _GridPainter oldDelegate) => false;
 }
 
-// ── Reusable private widgets ─────────────────────────────────────────────────
+// ── Animated floating icon ───────────────────────────────────────────────────
 
-class _DecorIcon extends StatelessWidget {
-  const _DecorIcon({
+/// Renders a teal [icon] that gently bobs up/down and rocks side-to-side,
+/// like an air bubble floating in water.  Each instance accepts a [phase]
+/// (0.0–1.0) so multiple icons can float out of sync.
+class _FloatingIcon extends StatefulWidget {
+  const _FloatingIcon({
     required this.icon,
+    required this.phase,
     this.size = 24,
     this.opacity = 0.2,
+    this.floatHeight = 12,
+    this.rotationRange = 0.10,
+    this.duration = const Duration(milliseconds: 3000),
   });
 
   final IconData icon;
   final double size;
   final double opacity;
 
+  /// Peak vertical travel in logical pixels (half above, half below origin).
+  final double floatHeight;
+
+  /// Max rotation in radians (applied as ±rotationRange).
+  final double rotationRange;
+
+  /// Full period of one up→down cycle.
+  final Duration duration;
+
+  /// Start offset (0.0–1.0) so icons are staggered.
+  final double phase;
+
+  @override
+  State<_FloatingIcon> createState() => _FloatingIconState();
+}
+
+class _FloatingIconState extends State<_FloatingIcon>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _float;
+  late final Animation<double> _rotate;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: widget.duration)
+      ..value = widget.phase
+      ..repeat(reverse: true);
+
+    // Vertical bob: floatHeight → -floatHeight
+    _float = Tween<double>(
+      begin: widget.floatHeight,
+      end: -widget.floatHeight,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+
+    // Gentle tilt: +rotationRange → -rotationRange
+    _rotate = Tween<double>(
+      begin: widget.rotationRange,
+      end: -widget.rotationRange,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: opacity,
-      child: Icon(
-        icon,
-        color: AppColors.decorIcon,
-        size: size,
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, child) => Transform.translate(
+        offset: Offset(0, _float.value),
+        child: Transform.rotate(
+          angle: _rotate.value,
+          child: child,
+        ),
+      ),
+      child: Opacity(
+        opacity: widget.opacity,
+        child: Icon(
+          widget.icon,
+          color: AppColors.decorIcon,
+          size: widget.size,
+        ),
       ),
     );
   }
 }
 
-class _Dot extends StatelessWidget {
-  const _Dot({this.size = 4});
+// ── Animated floating dot ────────────────────────────────────────────────────
+
+/// A small circle dot that floats vertically, mirroring [_FloatingIcon].
+class _FloatingDot extends StatefulWidget {
+  const _FloatingDot({
+    this.size = 4,
+    this.phase = 0.0,
+    this.duration = const Duration(milliseconds: 3000),
+  });
 
   final double size;
+  final double phase;
+  final Duration duration;
+
+  @override
+  State<_FloatingDot> createState() => _FloatingDotState();
+}
+
+class _FloatingDotState extends State<_FloatingDot>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _float;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(vsync: this, duration: widget.duration)
+      ..value = widget.phase
+      ..repeat(reverse: true);
+
+    _float = Tween<double>(begin: 6, end: -6)
+        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.primary.withValues(alpha: 0.35),
+    return AnimatedBuilder(
+      animation: _ctrl,
+      builder: (_, child) =>
+          Transform.translate(offset: Offset(0, _float.value), child: child),
+      child: Container(
+        width: widget.size,
+        height: widget.size,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.primary.withValues(alpha: 0.35),
+        ),
       ),
     );
   }
