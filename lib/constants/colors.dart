@@ -13,7 +13,7 @@ class AppColors {
   static const Color surface = Color(0xFF1E2540);
 
   /// Darkened pill / badge bg.
-  static const Color badgeBg = Color(0xFF141926);
+  static const Color badgeBg = Color(0xFF0B1526);
 
   // ── Brand / Accent ─────────────────────────────────────────────────────────
   /// Primary teal – used for logo, "Ikram", animated text, borders.
@@ -37,7 +37,7 @@ class AppColors {
 
   // ── UI Elements ────────────────────────────────────────────────────────────
   /// Border for outlined buttons / social icons.
-  static const Color border = Color(0xFF2E3A50);
+  static const Color border = Color(0xFF252F42);
 
   /// Background glow tint (radial, very translucent).
   static const Color glowColor = Color(0xFF1AE6BD);
@@ -49,8 +49,8 @@ class AppColors {
   /// Primary CTA button gradient – teal → purple.
   static const List<Color> primaryGradient = [primary, accent];
 
-  /// Name "Shaikh" gradient – teal → indigo.
-  static const List<Color> shaikhGradient = [secondary, accent];
+  /// Highlight gradient
+  static const List<Color> highlightGradient = [Color(0xFF1DFFD2), accent];
 
   /// Underline gradient – teal → purple.
   static const List<Color> underlineGradient = [primary, accent];

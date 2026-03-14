@@ -10,16 +10,16 @@ class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
 
   // ── Social links ──────────────────────────────────────────────────────────
-  static const String _githubUrl = 'https://github.com/';
-  static const String _linkedInUrl = 'https://linkedin.com/in/';
-  static const String _emailUrl = 'mailto:ikram@example.com';
+  static const String _githubUrl = 'https://github.com/shaikhikram04';
+  static const String _linkedInUrl =
+      'https://www.linkedin.com/in/ikram-kolekar-95b5b0250';
+  static const String _emailUrl = 'mailto:ikramkolekar045@gmail.com';
 
   // ── Typed role strings ────────────────────────────────────────────────────
   static const List<String> _roles = [
     'UI Enthusiast',
     'Flutter Developer',
-    'Mobile Engineer',
-    'Open Source Fan',
+    'Mobile App Builder',
   ];
 
   @override
@@ -35,27 +35,18 @@ class HeroSection extends StatelessWidget {
             children: [
               // ── Badge ─────────────────────────────────────────────────
               _HeroBadge(),
-              const SizedBox(height: 28),
+              const SizedBox(height: 42),
 
               // ── Main heading ──────────────────────────────────────────
               _HeroHeading(),
-              const SizedBox(height: 10),
-
-              // ── Gradient underline ────────────────────────────────────
-              _GradientUnderline(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 24),
 
               // ── Animated subtitle ─────────────────────────────────────
               _AnimatedSubtitle(),
               const SizedBox(height: 20),
 
               // ── Description ───────────────────────────────────────────
-              Text(
-                'Flutter developer passionate about building scalable mobile\n'
-                'applications and solving real-world problems.',
-                style: AppTextStyles.bodyDescription,
-                textAlign: TextAlign.center,
-              ),
+              _HeroDescription(),
               const SizedBox(height: 40),
 
               // ── CTA buttons ───────────────────────────────────────────
@@ -81,31 +72,64 @@ class HeroSection extends StatelessWidget {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// Dark pill badge – dot + code greeting text.
-class _HeroBadge extends StatelessWidget {
+/// Continuously pulses opacity 100% → 50% → 100% for a breathing effect.
+class _HeroBadge extends StatefulWidget {
+  @override
+  State<_HeroBadge> createState() => _HeroBadgeState();
+}
+
+class _HeroBadgeState extends State<_HeroBadge>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat(reverse: true);
+
+    _opacity = Tween<double>(
+      begin: 1.0,
+      end: 0.5,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
       decoration: BoxDecoration(
-        color: AppColors.badgeBg,
+        color: AppColors.badgeBg.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: AppColors.border, width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            width: 8,
-            height: 8,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
+          FadeTransition(
+            opacity: _opacity,
+            child: Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+              ),
             ),
           ),
           const SizedBox(width: 10),
           Text(
             '<hello world />',
-            style: AppTextStyles.badge,
+            style: AppTextStyles.badge.copyWith(fontSize: 14),
           ),
         ],
       ),
@@ -113,45 +137,57 @@ class _HeroBadge extends StatelessWidget {
   }
 }
 
-/// "Hi, I'm [Ikram] [Shaikh]" – mixed-colour headline.
+/// "Hi, I'm [Ikram Kolekar]" – single-line heading with responsive font size.
+///
+/// The underline is drawn via [TextDecoration] on the same [Text] widget,
+/// so [ShaderMask] applies the gradient to both text AND underline in a single
+/// paint pass. This eliminates the font-loading race condition that occurred
+/// when using [IntrinsicWidth] + a separate underline [Container].
 class _HeroHeading extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        Text("Hi, I'm ", style: AppTextStyles.heroHeadingBase),
-        Text('Ikram ', style: AppTextStyles.heroHeadingTeal),
-        // "Shaikh" with a blue→purple gradient via ShaderMask
-        ShaderMask(
-          shaderCallback: (bounds) => const LinearGradient(
-            colors: AppColors.shaikhGradient,
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ).createShader(
-            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-          ),
-          blendMode: BlendMode.srcIn,
-          child: Text('Shaikh', style: AppTextStyles.heroHeadingGradient),
-        ),
-      ],
-    );
+  static double _fontSize(double width) {
+    if (width < 400) return 28;
+    if (width < 500) return 34;
+    if (width < 600) return 42;
+    if (width < 750) return 52;
+    if (width < 900) return 60;
+    return 68;
   }
-}
 
-/// Horizontal gradient line below the heading.
-class _GradientUnderline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 420,
-      height: 3,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2),
-        gradient: const LinearGradient(
-          colors: AppColors.underlineGradient,
-        ),
+    final fs = _fontSize(MediaQuery.of(context).size.width);
+
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            "Hi, I'm ",
+            style: AppTextStyles.heroHeadingBase.copyWith(fontSize: fs),
+          ),
+          // ShaderMask applies the gradient to both the text glyphs and the
+          // TextDecoration underline in one pass – width always matches exactly.
+          ShaderMask(
+            shaderCallback: (bounds) => const LinearGradient(
+              colors: AppColors.primaryGradient,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ).createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
+            blendMode: BlendMode.srcIn,
+            child: Text(
+              'Ikram Kolekar',
+              style: AppTextStyles.heroHeadingGradient.copyWith(
+                fontSize: fs,
+                color: Colors.white,
+                decoration: TextDecoration.underline,
+                decorationColor: Colors.white,
+                decorationThickness: 1,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -159,18 +195,33 @@ class _GradientUnderline extends StatelessWidget {
 
 /// "I'm a [UI Enthusiast]|" – static prefix + animated typed part.
 class _AnimatedSubtitle extends StatelessWidget {
+  static double _fontSize(double width) {
+    if (width < 400) return 13;
+    if (width < 500) return 16;
+    if (width < 600) return 20;
+    if (width < 750) return 24;
+    if (width < 900) return 28;
+    return 32;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final fs = _fontSize(MediaQuery.of(context).size.width);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("I'm a ", style: AppTextStyles.subtitleBase),
+        Text(
+          "I'm a ",
+          style: AppTextStyles.subtitleBase.copyWith(fontSize: fs),
+        ),
         AnimatedTextKit(
           animatedTexts: HeroSection._roles
               .map(
                 (role) => TyperAnimatedText(
                   role,
-                  textStyle: AppTextStyles.subtitleAnimated,
+                  textStyle: AppTextStyles.subtitleAnimated.copyWith(
+                    fontSize: fs,
+                  ),
                   speed: const Duration(milliseconds: 80),
                 ),
               )
@@ -180,6 +231,29 @@ class _AnimatedSubtitle extends StatelessWidget {
           displayFullTextOnTap: false,
         ),
       ],
+    );
+  }
+}
+
+/// Responsive body description paragraph.
+class _HeroDescription extends StatelessWidget {
+  static double _fontSize(double width) {
+    if (width < 400) return 12;
+    if (width < 500) return 13;
+    if (width < 600) return 14;
+    if (width < 750) return 15;
+    if (width < 900) return 16;
+    return 18;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fs = _fontSize(MediaQuery.of(context).size.width);
+    return Text(
+      'Flutter developer passionate about building scalable mobile\n'
+      'applications and solving real-world problems.',
+      style: AppTextStyles.bodyDescription.copyWith(fontSize: fs),
+      textAlign: TextAlign.center,
     );
   }
 }
@@ -194,10 +268,7 @@ class _CtaButtons extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         // Gradient primary button
-        _GradientButton(
-          label: 'View Projects',
-          onTap: () {},
-        ),
+        _GradientButton(label: 'View Projects', onTap: () {}),
         // Download Resume – outlined
         _OutlinedIconButton(
           label: 'Download Resume',
@@ -205,10 +276,7 @@ class _CtaButtons extends StatelessWidget {
           onTap: () {},
         ),
         // Contact Me – outlined
-        _OutlinedButton(
-          label: 'Contact Me',
-          onTap: () {},
-        ),
+        _OutlinedButton(label: 'Contact Me', onTap: () {}),
       ],
     );
   }
@@ -240,21 +308,15 @@ class _GradientButtonState extends State<_GradientButton> {
           duration: const Duration(milliseconds: 180),
           padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(
               colors: _hovered
-                  ? [AppColors.accent, AppColors.primary]
+                  ? AppColors.highlightGradient
                   : AppColors.primaryGradient,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: _hovered ? const [0.3, 0.9] : const [0.2, 0.9],
             ),
-            boxShadow: _hovered
-                ? [
-                    BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.35),
-                      blurRadius: 20,
-                      offset: const Offset(0, 6),
-                    )
-                  ]
-                : [],
           ),
           child: Text(widget.label, style: AppTextStyles.buttonPrimary),
         ),
@@ -294,7 +356,7 @@ class _OutlinedIconButtonState extends State<_OutlinedIconButton> {
           duration: const Duration(milliseconds: 180),
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
             color: _hovered
                 ? AppColors.border.withValues(alpha: 0.5)
                 : Colors.transparent,
@@ -306,11 +368,7 @@ class _OutlinedIconButtonState extends State<_OutlinedIconButton> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                widget.icon,
-                size: 16,
-                color: AppColors.textPrimary,
-              ),
+              Icon(widget.icon, size: 16, color: AppColors.textPrimary),
               const SizedBox(width: 8),
               Text(widget.label, style: AppTextStyles.buttonOutlined),
             ],
@@ -445,10 +503,9 @@ class _SocialIconButtonState extends State<_SocialIconButton> {
           onTap: widget.onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 180),
-            width: 46,
-            height: 46,
+            width: 52,
+            height: 52,
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
               color: _hovered
                   ? AppColors.primary.withValues(alpha: 0.12)
                   : Colors.transparent,
@@ -456,12 +513,13 @@ class _SocialIconButtonState extends State<_SocialIconButton> {
                 color: _hovered ? AppColors.primary : AppColors.border,
                 width: 1.5,
               ),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
               child: widget.isFA
                   ? FaIcon(
                       widget.icon,
-                      size: 17,
+                      size: 18,
                       color: _hovered
                           ? AppColors.primary
                           : AppColors.textSecondary,

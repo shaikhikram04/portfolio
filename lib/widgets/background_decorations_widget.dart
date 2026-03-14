@@ -17,11 +17,7 @@ class BackgroundDecorations extends StatelessWidget {
     return Stack(
       children: [
         // ── 1. Grid ─────────────────────────────────────────────────────
-        Positioned.fill(
-          child: CustomPaint(
-            painter: _GridPainter(),
-          ),
-        ),
+        Positioned.fill(child: CustomPaint(painter: _GridPainter())),
 
         // ── 2. Top-centre radial glow (sits on top of grid) ─────────────
         Positioned.fill(
@@ -35,7 +31,7 @@ class BackgroundDecorations extends StatelessWidget {
                   AppColors.glowColor.withValues(alpha: 0.07),
                   Colors.transparent,
                 ],
-                stops: const [0.0, 0.4, 1.0],
+                stops: const [0.0, 0.3, 0.8],
               ),
             ),
           ),
@@ -107,78 +103,138 @@ class BackgroundDecorations extends StatelessWidget {
         const Positioned(
           top: 230,
           left: 210,
-          child: _FloatingDot(size: 4, phase: 0.0, duration: Duration(milliseconds: 2600)),
+          child: _FloatingDot(
+            size: 4,
+            phase: 0.0,
+            duration: Duration(milliseconds: 2600),
+          ),
         ),
         const Positioned(
           top: 340,
           right: 220,
-          child: _FloatingDot(size: 4, phase: 0.5, duration: Duration(milliseconds: 3100)),
+          child: _FloatingDot(
+            size: 4,
+            phase: 0.5,
+            duration: Duration(milliseconds: 3100),
+          ),
         ),
         const Positioned(
           bottom: 260,
           left: 300,
-          child: _FloatingDot(size: 4, phase: 0.2, duration: Duration(milliseconds: 2900)),
+          child: _FloatingDot(
+            size: 4,
+            phase: 0.2,
+            duration: Duration(milliseconds: 2900),
+          ),
         ),
         const Positioned(
           top: 160,
           left: 440,
-          child: _FloatingDot(size: 3, phase: 0.75, duration: Duration(milliseconds: 3400)),
+          child: _FloatingDot(
+            size: 3,
+            phase: 0.75,
+            duration: Duration(milliseconds: 3400),
+          ),
         ),
         const Positioned(
           bottom: 200,
           right: 320,
-          child: _FloatingDot(size: 3, phase: 0.4, duration: Duration(milliseconds: 2700)),
+          child: _FloatingDot(
+            size: 3,
+            phase: 0.4,
+            duration: Duration(milliseconds: 2700),
+          ),
         ),
         // Extra dots – spread across the canvas
         const Positioned(
           top: 80,
           left: 320,
-          child: _FloatingDot(size: 3, phase: 0.1, duration: Duration(milliseconds: 3200)),
+          child: _FloatingDot(
+            size: 3,
+            phase: 0.1,
+            duration: Duration(milliseconds: 3200),
+          ),
         ),
         const Positioned(
           top: 80,
           right: 400,
-          child: _FloatingDot(size: 4, phase: 0.65, duration: Duration(milliseconds: 2500)),
+          child: _FloatingDot(
+            size: 4,
+            phase: 0.65,
+            duration: Duration(milliseconds: 2500),
+          ),
         ),
         const Positioned(
           top: 200,
           right: 160,
-          child: _FloatingDot(size: 3, phase: 0.35, duration: Duration(milliseconds: 3700)),
+          child: _FloatingDot(
+            size: 3,
+            phase: 0.35,
+            duration: Duration(milliseconds: 3700),
+          ),
         ),
         const Positioned(
           top: 420,
           left: 140,
-          child: _FloatingDot(size: 5, phase: 0.85, duration: Duration(milliseconds: 2800)),
+          child: _FloatingDot(
+            size: 5,
+            phase: 0.85,
+            duration: Duration(milliseconds: 2800),
+          ),
         ),
         const Positioned(
           top: 480,
           right: 100,
-          child: _FloatingDot(size: 3, phase: 0.55, duration: Duration(milliseconds: 3300)),
+          child: _FloatingDot(
+            size: 3,
+            phase: 0.55,
+            duration: Duration(milliseconds: 3300),
+          ),
         ),
         const Positioned(
           top: 480,
           left: 520,
-          child: _FloatingDot(size: 4, phase: 0.22, duration: Duration(milliseconds: 2950)),
+          child: _FloatingDot(
+            size: 4,
+            phase: 0.22,
+            duration: Duration(milliseconds: 2950),
+          ),
         ),
         const Positioned(
           bottom: 380,
           left: 180,
-          child: _FloatingDot(size: 3, phase: 0.7, duration: Duration(milliseconds: 3550)),
+          child: _FloatingDot(
+            size: 3,
+            phase: 0.7,
+            duration: Duration(milliseconds: 3550),
+          ),
         ),
         const Positioned(
           bottom: 380,
           right: 240,
-          child: _FloatingDot(size: 5, phase: 0.45, duration: Duration(milliseconds: 2650)),
+          child: _FloatingDot(
+            size: 5,
+            phase: 0.45,
+            duration: Duration(milliseconds: 2650),
+          ),
         ),
         const Positioned(
           bottom: 100,
           left: 420,
-          child: _FloatingDot(size: 3, phase: 0.9, duration: Duration(milliseconds: 3050)),
+          child: _FloatingDot(
+            size: 3,
+            phase: 0.9,
+            duration: Duration(milliseconds: 3050),
+          ),
         ),
         const Positioned(
           bottom: 80,
           right: 160,
-          child: _FloatingDot(size: 4, phase: 0.15, duration: Duration(milliseconds: 2750)),
+          child: _FloatingDot(
+            size: 4,
+            phase: 0.15,
+            duration: Duration(milliseconds: 2750),
+          ),
         ),
       ],
     );
@@ -289,18 +345,11 @@ class _FloatingIconState extends State<_FloatingIcon>
       animation: _ctrl,
       builder: (_, child) => Transform.translate(
         offset: Offset(0, _float.value),
-        child: Transform.rotate(
-          angle: _rotate.value,
-          child: child,
-        ),
+        child: Transform.rotate(angle: _rotate.value, child: child),
       ),
       child: Opacity(
         opacity: widget.opacity,
-        child: Icon(
-          widget.icon,
-          color: AppColors.decorIcon,
-          size: widget.size,
-        ),
+        child: Icon(widget.icon, color: AppColors.decorIcon, size: widget.size),
       ),
     );
   }
@@ -336,8 +385,10 @@ class _FloatingDotState extends State<_FloatingDot>
       ..value = widget.phase
       ..repeat(reverse: true);
 
-    _float = Tween<double>(begin: 6, end: -6)
-        .animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
+    _float = Tween<double>(
+      begin: 6,
+      end: -6,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut));
   }
 
   @override

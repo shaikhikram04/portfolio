@@ -234,7 +234,7 @@ class _LogoText extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(
-            text: 'IS',
+            text: 'IK',
             style: AppTextStyles.logo,
           ),
           TextSpan(
