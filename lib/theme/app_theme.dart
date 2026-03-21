@@ -19,33 +19,34 @@ class AppTheme {
       brightness: Brightness.dark,
       scaffoldBackgroundColor: AppColors.background,
       colorScheme: const ColorScheme.dark(
-        surface: AppColors.surface,
+        surface: AppColors.card,
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         tertiary: AppColors.accent,
-        onPrimary: AppColors.background,
-        onSecondary: AppColors.textPrimary,
-        onSurface: AppColors.textPrimary,
+        onPrimary: AppColors.primaryForeground,
+        onSecondary: AppColors.secondaryForeground,
+        onSurface: AppColors.foreground,
         outline: AppColors.border,
+        error: AppColors.destructive,
       ),
       // ── Typography ────────────────────────────────────────────────────────
-      textTheme: GoogleFonts.poppinsTextTheme(
+      textTheme: GoogleFonts.interTextTheme(
         const TextTheme(
-          displayLarge: TextStyle(color: AppColors.textPrimary),
-          displayMedium: TextStyle(color: AppColors.textPrimary),
-          displaySmall: TextStyle(color: AppColors.textPrimary),
-          headlineLarge: TextStyle(color: AppColors.textPrimary),
-          headlineMedium: TextStyle(color: AppColors.textPrimary),
-          headlineSmall: TextStyle(color: AppColors.textPrimary),
-          titleLarge: TextStyle(color: AppColors.textPrimary),
-          titleMedium: TextStyle(color: AppColors.textSecondary),
-          titleSmall: TextStyle(color: AppColors.textSecondary),
-          bodyLarge: TextStyle(color: AppColors.textSecondary),
-          bodyMedium: TextStyle(color: AppColors.textSecondary),
-          bodySmall: TextStyle(color: AppColors.textMuted),
-          labelLarge: TextStyle(color: AppColors.textPrimary),
-          labelMedium: TextStyle(color: AppColors.textSecondary),
-          labelSmall: TextStyle(color: AppColors.textMuted),
+          displayLarge: TextStyle(color: AppColors.foreground),
+          displayMedium: TextStyle(color: AppColors.foreground),
+          displaySmall: TextStyle(color: AppColors.foreground),
+          headlineLarge: TextStyle(color: AppColors.foreground),
+          headlineMedium: TextStyle(color: AppColors.foreground),
+          headlineSmall: TextStyle(color: AppColors.foreground),
+          titleLarge: TextStyle(color: AppColors.foreground),
+          titleMedium: TextStyle(color: AppColors.secondaryForeground),
+          titleSmall: TextStyle(color: AppColors.secondaryForeground),
+          bodyLarge: TextStyle(color: AppColors.secondaryForeground),
+          bodyMedium: TextStyle(color: AppColors.secondaryForeground),
+          bodySmall: TextStyle(color: AppColors.mutedForeground),
+          labelLarge: TextStyle(color: AppColors.foreground),
+          labelMedium: TextStyle(color: AppColors.secondaryForeground),
+          labelSmall: TextStyle(color: AppColors.mutedForeground),
         ),
       ),
       // ── AppBar ────────────────────────────────────────────────────────────
@@ -54,23 +55,23 @@ class AppTheme {
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.poppins(
-          color: AppColors.textPrimary,
+        titleTextStyle: GoogleFonts.inter(
+          color: AppColors.foreground,
           fontSize: 16,
           fontWeight: FontWeight.w600,
         ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+        iconTheme: const IconThemeData(color: AppColors.foreground),
       ),
       // ── Buttons ───────────────────────────────────────────────────────────
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.background,
+          foregroundColor: AppColors.primaryForeground,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-          textStyle: GoogleFonts.poppins(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          textStyle: GoogleFonts.inter(
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -78,13 +79,13 @@ class AppTheme {
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.textPrimary,
+          foregroundColor: AppColors.foreground,
           side: const BorderSide(color: AppColors.border, width: 1.5),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
-          textStyle: GoogleFonts.poppins(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          textStyle: GoogleFonts.inter(
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -92,7 +93,7 @@ class AppTheme {
       ),
       // ── Icon ──────────────────────────────────────────────────────────────
       iconTheme: const IconThemeData(
-        color: AppColors.textSecondary,
+        color: AppColors.secondaryForeground,
         size: 22,
       ),
       // ── Divider ───────────────────────────────────────────────────────────

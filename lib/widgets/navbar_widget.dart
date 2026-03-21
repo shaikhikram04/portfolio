@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
@@ -7,9 +9,14 @@ import '../theme/app_text_styles.dart';
 /// On wide screens (≥ 900 px) it shows the full link row.
 /// On narrow screens it collapses to a hamburger menu.
 class PortfolioNavBar extends StatefulWidget {
-  const PortfolioNavBar({super.key, this.activeSection = 'Home'});
+  const PortfolioNavBar({
+    super.key,
+    this.activeSection = 'Home',
+    this.isScrolled = false,
+  });
 
   final String activeSection;
+  final bool isScrolled;
 
   @override
   State<PortfolioNavBar> createState() => _PortfolioNavBarState();
@@ -49,49 +56,69 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
     final width = MediaQuery.of(context).size.width;
     final hPadding = _responsiveHPadding(width);
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 18),
-      decoration: BoxDecoration(
-        // Subtle frosted-glass strip at the top
-        color: AppColors.background.withValues(alpha: 0.0),
-      ),
-      child: Row(
-        children: [
-          // ── Logo ───────────────────────────────────────────────────────
-          _LogoText(),
-          const Spacer(),
-          // ── Nav Links (desktop) ────────────────────────────────────────
-          LayoutBuilder(
-            builder: (context, constraints) {
-              if (width >= 900) {
-                return Row(
-                  children: _sections
-                      .map((s) => _NavLink(
-                            label: s,
-                            isActive: widget.activeSection == s,
-                            isHovered: _hoveredLink == s,
-                            onHoverChange: (hov) => setState(
-                              () => _hoveredLink = hov ? s : '',
-                            ),
-                          ))
-                      .toList(),
-                );
-              }
-              // Hamburger for smaller screens
-              return IconButton(
-                icon: const Icon(Icons.menu_rounded,
-                    color: AppColors.textSecondary),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              );
-            },
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: widget.isScrolled ? 16 : 0,
+          sigmaY: widget.isScrolled ? 16 : 0,
+        ),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+          padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 18),
+          decoration: BoxDecoration(
+            color: widget.isScrolled
+                ? AppColors.card.withValues(alpha: 0.50)
+                : Colors.transparent,
+            border: Border(
+              bottom: BorderSide(
+                color: widget.isScrolled
+                    ? Colors.white.withValues(alpha: 0.08)
+                    : Colors.transparent,
+                width: 1,
+              ),
+            ),
           ),
-        ],
+          child: Row(
+            children: [
+              // ── Logo ───────────────────────────────────────────────────────
+              _LogoText(),
+              const Spacer(),
+              // ── Nav Links (desktop) ────────────────────────────────────────
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  if (width >= 900) {
+                    return Row(
+                      children: _sections
+                          .map(
+                            (s) => _NavLink(
+                              label: s,
+                              isActive: widget.activeSection == s,
+                              isHovered: _hoveredLink == s,
+                              onHoverChange: (hov) =>
+                                  setState(() => _hoveredLink = hov ? s : ''),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  }
+                  // Hamburger for smaller screens
+                  return IconButton(
+                    icon: const Icon(
+                      Icons.menu_rounded,
+                      color: AppColors.textSecondary,
+                    ),
+                    onPressed: () => Scaffold.of(context).openDrawer(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
-
 }
-
 
 // ── Public drawer ────────────────────────────────────────────────────────────
 
@@ -124,11 +151,7 @@ class PortfolioDrawer extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
               child: _LogoText(),
             ),
-            Divider(
-              color: AppColors.border,
-              height: 1,
-              thickness: 1,
-            ),
+            Divider(color: AppColors.border, height: 1, thickness: 1),
             const SizedBox(height: 12),
 
             // ── Nav items ────────────────────────────────────────────
@@ -233,10 +256,7 @@ class _LogoText extends StatelessWidget {
     return RichText(
       text: TextSpan(
         children: [
-          TextSpan(
-            text: 'IK',
-            style: AppTextStyles.logo,
-          ),
+          TextSpan(text: 'IK', style: AppTextStyles.logo),
           TextSpan(
             text: '.',
             style: AppTextStyles.logo.copyWith(color: AppColors.primary),

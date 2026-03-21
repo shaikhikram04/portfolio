@@ -209,6 +209,7 @@ class _AnimatedSubtitle extends StatelessWidget {
     final fs = _fontSize(MediaQuery.of(context).size.width);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           "I'm a ",
@@ -230,7 +231,61 @@ class _AnimatedSubtitle extends StatelessWidget {
           pause: const Duration(milliseconds: 1200),
           displayFullTextOnTap: false,
         ),
+        const SizedBox(width: 2),
+        _TypingCursor(fontSize: fs),
       ],
+    );
+  }
+}
+
+/// Blinking caret shown after the animated typed role text.
+class _TypingCursor extends StatefulWidget {
+  const _TypingCursor({required this.fontSize});
+
+  final double fontSize;
+
+  @override
+  State<_TypingCursor> createState() => _TypingCursorState();
+}
+
+class _TypingCursorState extends State<_TypingCursor>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    )..repeat(reverse: true);
+
+    _opacity = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: Text(
+        '|',
+        style: AppTextStyles.subtitleAnimated.copyWith(
+          fontSize: widget.fontSize,
+          fontWeight: FontWeight.w400,
+          color: AppColors.primary,
+          height: 1,
+        ),
+      ),
     );
   }
 }
