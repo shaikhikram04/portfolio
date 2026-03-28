@@ -281,7 +281,7 @@ class _TypingCursorState extends State<_TypingCursor>
         '|',
         style: AppTextStyles.subtitleAnimated.copyWith(
           fontSize: widget.fontSize,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w300,
           color: AppColors.primary,
           height: 1,
         ),
@@ -495,19 +495,16 @@ class _SocialRow extends StatelessWidget {
       children: [
         _SocialIconButton(
           icon: FontAwesomeIcons.github,
-          tooltip: 'GitHub',
           onTap: () => _launchUrl(githubUrl),
         ),
         const SizedBox(width: 16),
         _SocialIconButton(
           icon: FontAwesomeIcons.linkedinIn,
-          tooltip: 'LinkedIn',
           onTap: () => _launchUrl(linkedInUrl),
         ),
         const SizedBox(width: 16),
         _SocialIconButton(
           icon: Icons.mail_outline_rounded,
-          tooltip: 'Email',
           onTap: () => _launchUrl(emailUrl),
           isFA: false,
         ),
@@ -527,13 +524,11 @@ class _SocialRow extends StatelessWidget {
 class _SocialIconButton extends StatefulWidget {
   const _SocialIconButton({
     required this.icon,
-    required this.tooltip,
     required this.onTap,
     this.isFA = true,
   });
 
   final IconData icon;
-  final String tooltip;
   final VoidCallback onTap;
 
   /// `true` → render as [FaIcon], `false` → render as [Icon].
@@ -552,41 +547,38 @@ class _SocialIconButtonState extends State<_SocialIconButton> {
       cursor: SystemMouseCursors.click,
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
-      child: Tooltip(
-        message: widget.tooltip,
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: _hovered
-                  ? AppColors.primary.withValues(alpha: 0.12)
-                  : Colors.transparent,
-              border: Border.all(
-                color: _hovered ? AppColors.primary : AppColors.border,
-                width: 1.5,
-              ),
-              borderRadius: BorderRadius.circular(12),
+      child: GestureDetector(
+        onTap: widget.onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          width: 52,
+          height: 52,
+          decoration: BoxDecoration(
+            color: _hovered
+                ? AppColors.primary.withValues(alpha: 0.12)
+                : Colors.transparent,
+            border: Border.all(
+              color: _hovered ? AppColors.primary : AppColors.border,
+              width: 1.5,
             ),
-            child: Center(
-              child: widget.isFA
-                  ? FaIcon(
-                      widget.icon,
-                      size: 18,
-                      color: _hovered
-                          ? AppColors.primary
-                          : AppColors.textSecondary,
-                    )
-                  : Icon(
-                      widget.icon,
-                      size: 20,
-                      color: _hovered
-                          ? AppColors.primary
-                          : AppColors.textSecondary,
-                    ),
-            ),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Center(
+            child: widget.isFA
+                ? FaIcon(
+                    widget.icon,
+                    size: 18,
+                    color: _hovered
+                        ? AppColors.primary
+                        : AppColors.textSecondary,
+                  )
+                : Icon(
+                    widget.icon,
+                    size: 20,
+                    color: _hovered
+                        ? AppColors.primary
+                        : AppColors.textSecondary,
+                  ),
           ),
         ),
       ),

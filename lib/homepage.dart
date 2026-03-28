@@ -4,6 +4,7 @@ import 'widgets/about_developer_section_widget.dart';
 import 'widgets/background_decorations_widget.dart';
 import 'widgets/hero_section_widget.dart';
 import 'widgets/navbar_widget.dart';
+import 'widgets/projects_section_widget.dart';
 
 /// Root page of the portfolio.
 ///
@@ -75,6 +76,9 @@ class _HomePageState extends State<HomePage> {
 
                 // About / developer profile section
                 const AboutDeveloperSection(),
+
+                // Projects showcase section
+                const ProjectsSection(),
               ],
             ),
           ),
