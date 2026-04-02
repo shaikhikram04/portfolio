@@ -14,10 +14,12 @@ class PortfolioNavBar extends StatefulWidget {
     super.key,
     this.activeSection = 'Home',
     this.isScrolled = false,
+    this.onSectionTap,
   });
 
   final String activeSection;
   final bool isScrolled;
+  final ValueChanged<String>? onSectionTap;
 
   @override
   State<PortfolioNavBar> createState() => _PortfolioNavBarState();
@@ -96,6 +98,7 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
                               label: s,
                               isActive: widget.activeSection == s,
                               isHovered: _hoveredLink == s,
+                              onTap: () => widget.onSectionTap?.call(s),
                               onHoverChange: (hov) =>
                                   setState(() => _hoveredLink = hov ? s : ''),
                             ),
@@ -125,9 +128,14 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
 
 /// Side drawer shown on narrow screens when the hamburger is tapped.
 class PortfolioDrawer extends StatelessWidget {
-  const PortfolioDrawer({super.key, this.activeSection = 'Home'});
+  const PortfolioDrawer({
+    super.key,
+    this.activeSection = 'Home',
+    this.onSectionTap,
+  });
 
   final String activeSection;
+  final ValueChanged<String>? onSectionTap;
 
   static const List<String> _sections = [
     'Home',
@@ -160,7 +168,10 @@ class PortfolioDrawer extends StatelessWidget {
               (s) => _DrawerNavItem(
                 label: s,
                 isActive: activeSection == s,
-                onTap: () => Navigator.pop(context),
+                onTap: () {
+                  onSectionTap?.call(s);
+                  Navigator.pop(context);
+                },
               ),
             ),
 
@@ -256,12 +267,14 @@ class _NavLink extends StatelessWidget {
     required this.label,
     required this.isActive,
     required this.isHovered,
+    required this.onTap,
     required this.onHoverChange,
   });
 
   final String label;
   final bool isActive;
   final bool isHovered;
+  final VoidCallback onTap;
   final ValueChanged<bool> onHoverChange;
 
   @override
@@ -272,7 +285,7 @@ class _NavLink extends StatelessWidget {
       onExit: (_) => onHoverChange(false),
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
-        onTap: () {},
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: AnimatedDefaultTextStyle(

@@ -25,12 +25,53 @@ class _HomePageState extends State<HomePage> {
   static const double _navBarHeight = 88;
 
   late final ScrollController _scrollController;
+  late final Map<String, GlobalKey> _sectionKeys;
   bool _hasScrolled = false;
 
   @override
   void initState() {
     super.initState();
+    _sectionKeys = {
+      'Home': GlobalKey(),
+      'About': GlobalKey(),
+      'Projects': GlobalKey(),
+      'Skills': GlobalKey(),
+      'Experience': GlobalKey(),
+      'Contact': GlobalKey(),
+    };
     _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _scrollToSection(String section) {
+    if (!_scrollController.hasClients) return;
+
+    if (section == 'Home') {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 450),
+        curve: Curves.easeInOut,
+      );
+      return;
+    }
+
+    final targetContext = _sectionKeys[section]?.currentContext;
+    if (targetContext == null) return;
+
+    final renderBox = targetContext.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final targetOffset =
+        renderBox.localToGlobal(Offset.zero).dy + _scrollController.offset;
+
+    final clamped = targetOffset.clamp(
+      0.0,
+      _scrollController.position.maxScrollExtent,
+    );
+    _scrollController.animateTo(
+      clamped,
+      duration: const Duration(milliseconds: 550),
+      curve: Curves.easeInOutCubic,
+    );
   }
 
   void _onScroll() {
@@ -54,7 +95,10 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      drawer: const PortfolioDrawer(activeSection: 'Home'),
+      drawer: PortfolioDrawer(
+        activeSection: 'Home',
+        onSectionTap: _scrollToSection,
+      ),
       body: Stack(
         children: [
           // ── Layer 1: scrollable page content ───────────────────────
@@ -63,6 +107,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 SizedBox(
+                  key: _sectionKeys['Home'],
                   height: viewportHeight,
                   child: Stack(
                     children: [
@@ -78,19 +123,19 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // About / developer profile section
-                const AboutDeveloperSection(),
+                AboutDeveloperSection(key: _sectionKeys['About']),
 
                 // Projects showcase section
-                const ProjectsSection(),
+                ProjectsSection(key: _sectionKeys['Projects']),
 
                 // Skills section
-                const SkillsSection(),
+                SkillsSection(key: _sectionKeys['Skills']),
 
                 // Experience section
-                const ExperienceSection(),
+                ExperienceSection(key: _sectionKeys['Experience']),
 
                 // Contact section
-                const ContactSection(),
+                ContactSection(key: _sectionKeys['Contact']),
               ],
             ),
           ),
@@ -103,6 +148,7 @@ class _HomePageState extends State<HomePage> {
             child: PortfolioNavBar(
               activeSection: 'Home',
               isScrolled: _hasScrolled,
+              onSectionTap: _scrollToSection,
             ),
           ),
         ],
