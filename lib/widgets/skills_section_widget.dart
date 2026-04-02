@@ -90,7 +90,7 @@ class SkillsSection extends StatelessWidget {
                   ),
                   ShaderMask(
                     shaderCallback: (bounds) =>
-                        const LinearGradient(
+                        LinearGradient(
                           colors: AppColors.primaryGradient,
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,
@@ -413,7 +413,7 @@ class _SkillCard extends StatelessWidget {
                             child: FractionallySizedBox(
                               widthFactor: clampedFill,
                               child: Container(
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: AppColors.primaryGradient,
                                     begin: Alignment.centerLeft,
@@ -434,7 +434,7 @@ class _SkillCard extends StatelessWidget {
                         height: bubbleSize,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          gradient: const LinearGradient(
+                          gradient: LinearGradient(
                             colors: AppColors.primaryGradient,
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,

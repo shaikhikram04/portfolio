@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import 'portfolio_logo_widget.dart';
 import '../theme/app_text_styles.dart';
 
 /// Responsive top navigation bar.
@@ -82,7 +83,7 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
           child: Row(
             children: [
               // ── Logo ───────────────────────────────────────────────────────
-              _LogoText(),
+              const PortfolioLogoText(),
               const Spacer(),
               // ── Nav Links (desktop) ────────────────────────────────────────
               LayoutBuilder(
@@ -149,7 +150,7 @@ class PortfolioDrawer extends StatelessWidget {
             // ── Drawer header ────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-              child: _LogoText(),
+              child: const PortfolioLogoText(),
             ),
             Divider(color: AppColors.border, height: 1, thickness: 1),
             const SizedBox(height: 12),
@@ -249,23 +250,6 @@ class _DrawerNavItemState extends State<_DrawerNavItem> {
 }
 
 // ── Private sub-widgets ───────────────────────────────────────────────────────
-
-class _LogoText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(text: 'IK', style: AppTextStyles.logo),
-          TextSpan(
-            text: '.',
-            style: AppTextStyles.logo.copyWith(color: AppColors.primary),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _NavLink extends StatelessWidget {
   const _NavLink({

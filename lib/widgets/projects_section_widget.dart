@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../constants/colors.dart';
+import 'section_backdrop_widget.dart';
 import '../theme/app_text_styles.dart';
 
 class ProjectsSection extends StatelessWidget {
@@ -41,7 +42,7 @@ class ProjectsSection extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          const Positioned.fill(child: _SectionBackdrop()),
+          const Positioned.fill(child: SectionBackdrop()),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: metrics.horizontalPadding,
@@ -75,7 +76,7 @@ class ProjectsSection extends StatelessWidget {
                         ),
                         ShaderMask(
                           shaderCallback: (bounds) =>
-                              const LinearGradient(
+                              LinearGradient(
                                 colors: AppColors.primaryGradient,
                                 begin: Alignment.centerLeft,
                                 end: Alignment.centerRight,
@@ -612,37 +613,6 @@ class _ActionButtonState extends State<_ActionButton> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _SectionBackdrop extends StatelessWidget {
-  const _SectionBackdrop();
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  center: const Alignment(0.0, -1.5),
-                  radius: 1,
-                  colors: [
-                    AppColors.glowColor.withValues(alpha: 0.4),
-                    AppColors.glowColor.withValues(alpha: 0.1),
-                    Colors.transparent,
-                  ],
-                  stops: const [0.0, 0.3, 0.8],
-                ),
-              ),
-            ),
-          ),
-          // Positioned.fill(child: CustomPaint(painter: _VerticalBandPainter())),
-        ],
       ),
     );
   }

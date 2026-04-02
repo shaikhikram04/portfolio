@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -49,7 +47,7 @@ class AboutDeveloperSection extends StatelessWidget {
                   ),
                   ShaderMask(
                     shaderCallback: (bounds) =>
-                        const LinearGradient(
+                        LinearGradient(
                           colors: AppColors.primaryGradient,
                           begin: Alignment.centerLeft,
                           end: Alignment.centerRight,

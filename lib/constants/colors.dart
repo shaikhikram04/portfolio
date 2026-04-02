@@ -34,10 +34,13 @@ class AppColors {
 
   // ── Gradients (convenience) ────────────────────────────────────────────────
   /// Primary CTA button gradient – teal → purple.
-  static const List<Color> primaryGradient = [primary, accent];
+  static const List<Color> primaryGradient = [primary, Color(0xFF6C56C2)];
 
   /// Highlight gradient
-  static const List<Color> highlightGradient = [Color(0xFF42F0C8), accent];
+  static const List<Color> highlightGradient = [
+    Color(0xFF42F0C8),
+    Color(0xFF6C56C2),
+  ];
 
   /// Underline gradient – teal → purple.
   static const List<Color> underlineGradient = [primary, accent];

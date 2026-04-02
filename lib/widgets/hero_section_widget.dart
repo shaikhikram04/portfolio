@@ -170,7 +170,7 @@ class _HeroHeading extends StatelessWidget {
           // ShaderMask applies the gradient to both the text glyphs and the
           // TextDecoration underline in one pass – width always matches exactly.
           ShaderMask(
-            shaderCallback: (bounds) => const LinearGradient(
+            shaderCallback: (bounds) => LinearGradient(
               colors: AppColors.primaryGradient,
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
