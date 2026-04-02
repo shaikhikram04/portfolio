@@ -6,6 +6,7 @@ import 'widgets/hero_section_widget.dart';
 import 'widgets/navbar_widget.dart';
 import 'widgets/projects_section_widget.dart';
 import 'widgets/skills_section_widget.dart';
+import 'widgets/experience_section_widget.dart';
 import 'widgets/contact_section_widget.dart';
 
 /// Root page of the portfolio.
@@ -84,6 +85,9 @@ class _HomePageState extends State<HomePage> {
 
                 // Skills section
                 const SkillsSection(),
+
+                // Experience section
+                const ExperienceSection(),
 
                 // Contact section
                 const ContactSection(),
