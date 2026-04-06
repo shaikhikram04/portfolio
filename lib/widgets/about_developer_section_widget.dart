@@ -416,41 +416,69 @@ class _InfoCardData {
   final String value;
 }
 
-class _InfoCard extends StatelessWidget {
+class _InfoCard extends StatefulWidget {
   const _InfoCard({required this.data, required this.metrics});
 
   final _InfoCardData data;
   final _SectionMetrics metrics;
 
   @override
+  State<_InfoCard> createState() => _InfoCardState();
+}
+
+class _InfoCardState extends State<_InfoCard> {
+  bool _hovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return _GlassCard(
-      borderRadius: BorderRadius.circular(12),
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(data.icon, color: AppColors.primary, size: 22),
-          const SizedBox(height: 9),
-          Text(
-            data.label,
-            style: AppTextStyles.navLink.copyWith(
-              fontSize: metrics.statTitleSize,
-              color: AppColors.textMuted,
-              fontWeight: FontWeight.w500,
+    final borderRadius = BorderRadius.circular(12);
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0x851D2027),
+          borderRadius: borderRadius,
+          border: Border.all(
+            color: _hovered
+                ? AppColors.primary.withValues(alpha: 0.45)
+                : Colors.white.withValues(alpha: 0.08),
+            width: 1,
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: borderRadius,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(widget.data.icon, color: AppColors.primary, size: 22),
+                const SizedBox(height: 9),
+                Text(
+                  widget.data.label,
+                  style: AppTextStyles.navLink.copyWith(
+                    fontSize: widget.metrics.statTitleSize,
+                    color: AppColors.textMuted,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  widget.data.value,
+                  style: AppTextStyles.subtitleBase.copyWith(
+                    fontSize: widget.metrics.statValueSize,
+                    color: AppColors.foreground,
+                    fontWeight: FontWeight.w600,
+                    height: 1.05,
+                  ),
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            data.value,
-            style: AppTextStyles.subtitleBase.copyWith(
-              fontSize: metrics.statValueSize,
-              color: AppColors.foreground,
-              fontWeight: FontWeight.w600,
-              height: 1.05,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -498,28 +526,57 @@ class _FavouriteToolsCard extends StatelessWidget {
             runSpacing: 8,
             children: tools
                 .map(
-                  (tool) => Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withValues(alpha: 0.82),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      tool,
-                      style: AppTextStyles.navLink.copyWith(
-                        fontSize: metrics.isMobile ? 12 : 13,
-                        color: AppColors.secondaryForeground,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                  (tool) => _ToolCapsule(
+                    label: tool,
+                    fontSize: metrics.isMobile ? 12 : 13,
                   ),
                 )
                 .toList(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ToolCapsule extends StatefulWidget {
+  const _ToolCapsule({required this.label, required this.fontSize});
+
+  final String label;
+  final double fontSize;
+
+  @override
+  State<_ToolCapsule> createState() => _ToolCapsuleState();
+}
+
+class _ToolCapsuleState extends State<_ToolCapsule> {
+  bool _hovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hovered = true),
+      onExit: (_) => setState(() => _hovered = false),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: AppColors.secondary.withValues(alpha: 0.65),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: _hovered
+                ? AppColors.primary.withValues(alpha: 0.45)
+                : AppColors.border,
+            width: 1,
+          ),
+        ),
+        child: Text(
+          widget.label,
+          style: AppTextStyles.navLink.copyWith(
+            fontSize: widget.fontSize,
+            color: _hovered ? AppColors.primary : AppColors.textMuted,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }

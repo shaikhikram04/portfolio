@@ -4,10 +4,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
+import '../utils/resume_downloader.dart';
 
 /// Full-height hero / landing section displayed below the navbar.
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key});
+  const HeroSection({super.key, required this.onViewProjectsTap});
+
+  final VoidCallback onViewProjectsTap;
 
   // ── Social links ──────────────────────────────────────────────────────────
   static const String _githubUrl = 'https://github.com/shaikhikram04';
@@ -21,6 +24,33 @@ class HeroSection extends StatelessWidget {
     'Flutter Developer',
     'Mobile App Builder',
   ];
+
+  static const String _resumeFilePath = '/resume/Ikram_Kolekar_Resume.pdf';
+  static const String _resumeFileName = 'Ikram_Kolekar_Resume.pdf';
+
+  Future<void> _handleResumeDownload(BuildContext context) async {
+    final downloaded = await downloadResume(
+      filePath: _resumeFilePath,
+      fileName: _resumeFileName,
+    );
+
+    if (downloaded || !context.mounted) return;
+
+    final fallbackUri = Uri.parse(Uri.base.resolve(_resumeFilePath).toString());
+    if (await canLaunchUrl(fallbackUri)) {
+      await launchUrl(fallbackUri, mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Resume not found. Add your PDF at web/resume/Ikram_Kolekar_Resume.pdf',
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +80,10 @@ class HeroSection extends StatelessWidget {
               const SizedBox(height: 40),
 
               // ── CTA buttons ───────────────────────────────────────────
-              _CtaButtons(),
+              _CtaButtons(
+                onViewProjectsTap: onViewProjectsTap,
+                onDownloadResumeTap: () => _handleResumeDownload(context),
+              ),
               const SizedBox(height: 40),
 
               // ── Social links ──────────────────────────────────────────
@@ -129,7 +162,7 @@ class _HeroBadgeState extends State<_HeroBadge>
           const SizedBox(width: 10),
           Text(
             '<hello world />',
-            style: AppTextStyles.badge.copyWith(fontSize: 14),
+            style: AppTextStyles.badge.copyWith(fontSize: 16),
           ),
         ],
       ),
@@ -258,7 +291,7 @@ class _TypingCursorState extends State<_TypingCursor>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
 
     _opacity = Tween<double>(
@@ -315,6 +348,14 @@ class _HeroDescription extends StatelessWidget {
 
 /// Three CTA buttons – "View Projects", "Download Resume", "Contact Me".
 class _CtaButtons extends StatelessWidget {
+  const _CtaButtons({
+    required this.onViewProjectsTap,
+    required this.onDownloadResumeTap,
+  });
+
+  final VoidCallback onViewProjectsTap;
+  final VoidCallback onDownloadResumeTap;
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -323,12 +364,12 @@ class _CtaButtons extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: [
         // Gradient primary button
-        _GradientButton(label: 'View Projects', onTap: () {}),
+        _GradientButton(label: 'View Projects', onTap: onViewProjectsTap),
         // Download Resume – outlined
         _OutlinedIconButton(
           label: 'Download Resume',
           icon: Icons.download_rounded,
-          onTap: () {},
+          onTap: onDownloadResumeTap,
         ),
         // Contact Me – outlined
         _OutlinedButton(label: 'Contact Me', onTap: () {}),
@@ -412,13 +453,24 @@ class _OutlinedIconButtonState extends State<_OutlinedIconButton> {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: _hovered
-                ? AppColors.border.withValues(alpha: 0.5)
-                : Colors.transparent,
+            color: Colors.transparent,
             border: Border.all(
-              color: _hovered ? AppColors.textSecondary : AppColors.border,
+              color: _hovered
+                  ? AppColors.primary.withValues(alpha: 0.6)
+                  : AppColors.border,
               width: 1.5,
             ),
+            boxShadow: _hovered
+                ? [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.25),
+                      blurRadius: 16,
+                      spreadRadius: 1,
+                      offset: Offset.zero,
+                      blurStyle: BlurStyle.outer,
+                    ),
+                  ]
+                : null,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -458,18 +510,45 @@ class _OutlinedButtonState extends State<_OutlinedButton> {
         onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          padding: const EdgeInsets.all(1.5),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: _hovered
-                ? AppColors.border.withValues(alpha: 0.5)
-                : Colors.transparent,
-            border: Border.all(
-              color: _hovered ? AppColors.textSecondary : AppColors.border,
-              width: 1.5,
+            borderRadius: BorderRadius.circular(12),
+            gradient: LinearGradient(
+              colors: _hovered
+                  ? AppColors.highlightGradient
+                  : AppColors.primaryGradient,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
+            boxShadow: _hovered
+                ? [
+                    BoxShadow(
+                      color: AppColors.highlightGradient.first.withValues(
+                        alpha: 0.22,
+                      ),
+                      blurRadius: 6,
+                      spreadRadius: 0.6,
+                      offset: Offset.zero,
+                    ),
+                    BoxShadow(
+                      color: AppColors.highlightGradient.last.withValues(
+                        alpha: 0.18,
+                      ),
+                      blurRadius: 8,
+                      spreadRadius: 0.2,
+                      offset: Offset.zero,
+                    ),
+                  ]
+                : null,
           ),
-          child: Text(widget.label, style: AppTextStyles.buttonOutlined),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(10.5),
+            ),
+            child: Text(widget.label, style: AppTextStyles.buttonOutlined),
+          ),
         ),
       ),
     );
@@ -549,36 +628,46 @@ class _SocialIconButtonState extends State<_SocialIconButton> {
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
         onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          width: 52,
-          height: 52,
-          decoration: BoxDecoration(
-            color: _hovered
-                ? AppColors.primary.withValues(alpha: 0.12)
-                : Colors.transparent,
-            border: Border.all(
-              color: _hovered ? AppColors.primary : AppColors.border,
-              width: 1.5,
+        child: SizedBox(
+          width: 56,
+          height: 56,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 220),
+              curve: Curves.easeOutCubic,
+              width: _hovered ? 56 : 52,
+              height: _hovered ? 56 : 52,
+              decoration: BoxDecoration(
+                color: _hovered
+                    ? Colors.transparent
+                    : AppColors.secondary.withValues(alpha: 0.3),
+                border: Border.all(
+                  color: _hovered
+                      ? AppColors.primary.withValues(alpha: 0.25)
+                      : AppColors.border,
+                  width: 1.5,
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Center(
+                child: widget.isFA
+                    ? FaIcon(
+                        widget.icon,
+                        size: _hovered ? 20 : 18,
+                        color: _hovered
+                            ? AppColors.primary
+                            : AppColors.textSecondary,
+                      )
+                    : Icon(
+                        widget.icon,
+                        size: _hovered ? 22 : 20,
+                        color: _hovered
+                            ? AppColors.primary
+                            : AppColors.textSecondary,
+                      ),
+              ),
             ),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Center(
-            child: widget.isFA
-                ? FaIcon(
-                    widget.icon,
-                    size: 18,
-                    color: _hovered
-                        ? AppColors.primary
-                        : AppColors.textSecondary,
-                  )
-                : Icon(
-                    widget.icon,
-                    size: 20,
-                    color: _hovered
-                        ? AppColors.primary
-                        : AppColors.textSecondary,
-                  ),
           ),
         ),
       ),

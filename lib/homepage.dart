@@ -115,7 +115,12 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         children: [
                           const SizedBox(height: _navBarHeight),
-                          const Expanded(child: HeroSection()),
+                          Expanded(
+                            child: HeroSection(
+                              onViewProjectsTap: () =>
+                                  _scrollToSection('Projects'),
+                            ),
+                          ),
                         ],
                       ),
                     ],
