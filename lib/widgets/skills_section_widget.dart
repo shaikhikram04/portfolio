@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
+import 'section_card_widget.dart';
+import 'section_header_widget.dart';
 
 class SkillsSection extends StatelessWidget {
   const SkillsSection({super.key});
@@ -68,48 +70,27 @@ class SkillsSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '// skills',
-                style: AppTextStyles.badge.copyWith(
+              SectionHeader(
+                badgeText: '// skills',
+                leadingText: 'Tech ',
+                highlightedText: 'Stack',
+                badgeBottomSpacing: 10,
+                badgeStyle: AppTextStyles.badge.copyWith(
                   fontSize: metrics.sectionLabelSize,
                   color: AppColors.primary.withValues(alpha: 0.95),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Tech ',
-                    style: AppTextStyles.heroHeadingBase.copyWith(
-                      fontSize: metrics.titleSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  ShaderMask(
-                    shaderCallback: (bounds) =>
-                        LinearGradient(
-                          colors: AppColors.primaryGradient,
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ).createShader(
-                          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                        ),
-                    blendMode: BlendMode.srcIn,
-                    child: Text(
-                      'Stack',
-                      style: AppTextStyles.heroHeadingGradient.copyWith(
-                        fontSize: metrics.titleSize,
-                        fontWeight: FontWeight.w700,
-                        height: 1.06,
-                        letterSpacing: -0.8,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                leadingStyle: AppTextStyles.heroHeadingBase.copyWith(
+                  fontSize: metrics.titleSize,
+                  fontWeight: FontWeight.w700,
+                  height: 1.06,
+                  letterSpacing: -0.8,
+                ),
+                highlightedStyle: AppTextStyles.heroHeadingGradient.copyWith(
+                  fontSize: metrics.titleSize,
+                  fontWeight: FontWeight.w700,
+                  height: 1.06,
+                  letterSpacing: -0.8,
+                ),
               ),
               SizedBox(height: metrics.groupsTopGap),
               ..._groups.map(
@@ -322,14 +303,12 @@ class _SkillCard extends StatelessWidget {
     final fill = skill.value / 100;
     final clampedFill = fill.clamp(0, 1).toDouble();
 
-    return Container(
+    return SectionCard(
       height: metrics.cardHeight,
       padding: metrics.cardPadding,
-      decoration: BoxDecoration(
-        color: AppColors.card.withValues(alpha: 0.78),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
-      ),
+      borderRadius: BorderRadius.circular(12),
+      backgroundColor: AppColors.card.withValues(alpha: 0.78),
+      borderColor: AppColors.border.withValues(alpha: 0.8),
       child: Column(
         children: [
           Row(

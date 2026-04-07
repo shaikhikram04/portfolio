@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ikram_portfolio/widgets/social_row.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/colors.dart';
@@ -704,25 +705,7 @@ class _Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final socialButtons = [
-      _FooterSocialButton(
-        icon: FontAwesomeIcons.github,
-        onTap: () => ContactSection._launchExternal(ContactSection._githubUrl),
-        metrics: metrics,
-      ),
-      _FooterSocialButton(
-        icon: FontAwesomeIcons.linkedinIn,
-        onTap: () =>
-            ContactSection._launchExternal(ContactSection._linkedInUrl),
-        metrics: metrics,
-      ),
-      _FooterSocialButton(
-        icon: Icons.mail_outline_rounded,
-        isFontAwesome: false,
-        onTap: () => ContactSection._launchExternal(ContactSection._emailUrl),
-        metrics: metrics,
-      ),
-    ];
+    final socialButtons = SocialRow(scaleFactor: 0.9);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -741,22 +724,14 @@ class _Footer extends StatelessWidget {
                           children: [
                             _FooterBrand(metrics: metrics),
                             const SizedBox(height: 20),
-                            Wrap(spacing: 12, children: socialButtons),
+                            socialButtons,
                           ],
                         )
                       : Row(
                           children: [
                             _FooterBrand(metrics: metrics),
                             const Spacer(),
-                            ...socialButtons
-                                .expand(
-                                  (button) => [
-                                    button,
-                                    const SizedBox(width: 12),
-                                  ],
-                                )
-                                .toList()
-                              ..removeLast(),
+                            socialButtons,
                           ],
                         ),
                 ),

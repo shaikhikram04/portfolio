@@ -1,6 +1,6 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ikram_portfolio/widgets/social_row.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
@@ -11,12 +11,6 @@ class HeroSection extends StatelessWidget {
   const HeroSection({super.key, required this.onViewProjectsTap});
 
   final VoidCallback onViewProjectsTap;
-
-  // ── Social links ──────────────────────────────────────────────────────────
-  static const String _githubUrl = 'https://github.com/shaikhikram04';
-  static const String _linkedInUrl =
-      'https://www.linkedin.com/in/ikram-kolekar-95b5b0250';
-  static const String _emailUrl = 'mailto:ikramkolekar045@gmail.com';
 
   // ── Typed role strings ────────────────────────────────────────────────────
   static const List<String> _roles = [
@@ -87,11 +81,7 @@ class HeroSection extends StatelessWidget {
               const SizedBox(height: 40),
 
               // ── Social links ──────────────────────────────────────────
-              _SocialRow(
-                githubUrl: _githubUrl,
-                linkedInUrl: _linkedInUrl,
-                emailUrl: _emailUrl,
-              ),
+              SocialRow(),
             ],
           ),
         ),
@@ -548,126 +538,6 @@ class _OutlinedButtonState extends State<_OutlinedButton> {
               borderRadius: BorderRadius.circular(10.5),
             ),
             child: Text(widget.label, style: AppTextStyles.buttonOutlined),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Three circular social icon buttons.
-class _SocialRow extends StatelessWidget {
-  const _SocialRow({
-    required this.githubUrl,
-    required this.linkedInUrl,
-    required this.emailUrl,
-  });
-
-  final String githubUrl;
-  final String linkedInUrl;
-  final String emailUrl;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _SocialIconButton(
-          icon: FontAwesomeIcons.github,
-          onTap: () => _launchUrl(githubUrl),
-        ),
-        const SizedBox(width: 16),
-        _SocialIconButton(
-          icon: FontAwesomeIcons.linkedinIn,
-          onTap: () => _launchUrl(linkedInUrl),
-        ),
-        const SizedBox(width: 16),
-        _SocialIconButton(
-          icon: Icons.mail_outline_rounded,
-          onTap: () => _launchUrl(emailUrl),
-          isFA: false,
-        ),
-      ],
-    );
-  }
-
-  Future<void> _launchUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
-  }
-}
-
-/// Circular outlined icon button for social links.
-class _SocialIconButton extends StatefulWidget {
-  const _SocialIconButton({
-    required this.icon,
-    required this.onTap,
-    this.isFA = true,
-  });
-
-  final IconData icon;
-  final VoidCallback onTap;
-
-  /// `true` → render as [FaIcon], `false` → render as [Icon].
-  final bool isFA;
-
-  @override
-  State<_SocialIconButton> createState() => _SocialIconButtonState();
-}
-
-class _SocialIconButtonState extends State<_SocialIconButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: SizedBox(
-          width: 56,
-          height: 56,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOutCubic,
-              width: _hovered ? 56 : 52,
-              height: _hovered ? 56 : 52,
-              decoration: BoxDecoration(
-                color: _hovered
-                    ? Colors.transparent
-                    : AppColors.secondary.withValues(alpha: 0.3),
-                border: Border.all(
-                  color: _hovered
-                      ? AppColors.primary.withValues(alpha: 0.25)
-                      : AppColors.border,
-                  width: 1.5,
-                ),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Center(
-                child: widget.isFA
-                    ? FaIcon(
-                        widget.icon,
-                        size: _hovered ? 20 : 18,
-                        color: _hovered
-                            ? AppColors.primary
-                            : AppColors.textSecondary,
-                      )
-                    : Icon(
-                        widget.icon,
-                        size: _hovered ? 22 : 20,
-                        color: _hovered
-                            ? AppColors.primary
-                            : AppColors.textSecondary,
-                      ),
-              ),
-            ),
           ),
         ),
       ),

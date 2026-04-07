@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
+import 'section_card_widget.dart';
+import 'section_header_widget.dart';
 
 class AboutDeveloperSection extends StatelessWidget {
   const AboutDeveloperSection({super.key});
@@ -25,48 +27,26 @@ class AboutDeveloperSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '// about me',
-                style: AppTextStyles.badge.copyWith(
+              SectionHeader(
+                badgeText: '// about me',
+                leadingText: 'Developer ',
+                highlightedText: 'Profile',
+                badgeStyle: AppTextStyles.badge.copyWith(
                   fontSize: metrics.aboutLabelSize,
                   color: AppColors.primary.withValues(alpha: 0.95),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Developer ',
-                    style: AppTextStyles.heroHeadingBase.copyWith(
-                      fontSize: metrics.titleSize,
-                      height: 1.18,
-                      letterSpacing: 0.5,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  ShaderMask(
-                    shaderCallback: (bounds) =>
-                        LinearGradient(
-                          colors: AppColors.primaryGradient,
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ).createShader(
-                          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                        ),
-                    blendMode: BlendMode.srcIn,
-                    child: Text(
-                      'Profile',
-                      style: AppTextStyles.heroHeadingGradient.copyWith(
-                        fontSize: metrics.titleSize,
-                        height: 1.18,
-                        letterSpacing: 0.5,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                leadingStyle: AppTextStyles.heroHeadingBase.copyWith(
+                  fontSize: metrics.titleSize,
+                  height: 1.18,
+                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w400,
+                ),
+                highlightedStyle: AppTextStyles.heroHeadingGradient.copyWith(
+                  fontSize: metrics.titleSize,
+                  height: 1.18,
+                  letterSpacing: 0.5,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
               SizedBox(height: metrics.blockGap),
               if (metrics.isMobile)
@@ -179,7 +159,7 @@ class _TerminalCard extends StatelessWidget {
       letterSpacing: 0.15,
     );
 
-    return _GlassCard(
+    return SectionCard(
       borderRadius: cardRadius,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,7 +473,7 @@ class _FavouriteToolsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final tools = ['VS Code', 'Git', 'Android Studio', 'Claude Code'];
 
-    return _GlassCard(
+    return SectionCard(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
       borderRadius: BorderRadius.circular(12),
@@ -598,7 +578,7 @@ class _TechStackCard extends StatelessWidget {
       'GetX',
     ];
 
-    return _GlassCard(
+    return SectionCard(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
         horizontal: metrics.isMobile ? 14 : 18,
@@ -700,38 +680,6 @@ class _AnimatedTerminalCursorState extends State<_AnimatedTerminalCursor>
     return FadeTransition(
       opacity: _opacity,
       child: Text('▌', style: widget.style),
-    );
-  }
-}
-
-class _GlassCard extends StatelessWidget {
-  const _GlassCard({
-    required this.child,
-    this.width,
-    this.padding,
-    this.borderRadius,
-  });
-
-  final Widget child;
-  final double? width;
-  final EdgeInsetsGeometry? padding;
-  final BorderRadius? borderRadius;
-
-  @override
-  Widget build(BuildContext context) {
-    final radius = borderRadius ?? BorderRadius.circular(12);
-
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: const Color(0x851D2027),
-        borderRadius: radius,
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
-      ),
-      child: ClipRRect(
-        borderRadius: radius,
-        child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
-      ),
     );
   }
 }

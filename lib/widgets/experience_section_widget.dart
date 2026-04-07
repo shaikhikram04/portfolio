@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
+import 'section_card_widget.dart';
+import 'section_header_widget.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});
@@ -52,48 +54,26 @@ class ExperienceSection extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '// experience',
-                style: AppTextStyles.badge.copyWith(
+              SectionHeader(
+                badgeText: '// experience',
+                leadingText: 'Work ',
+                highlightedText: 'Experience',
+                badgeStyle: AppTextStyles.badge.copyWith(
                   fontSize: metrics.sectionLabelSize,
                   color: AppColors.primary.withValues(alpha: 0.95),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Work ',
-                    style: AppTextStyles.heroHeadingBase.copyWith(
-                      fontSize: metrics.titleSize,
-                      fontWeight: FontWeight.w700,
-                      height: 1.06,
-                      letterSpacing: -0.8,
-                    ),
-                  ),
-                  ShaderMask(
-                    shaderCallback: (bounds) =>
-                        LinearGradient(
-                          colors: AppColors.primaryGradient,
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ).createShader(
-                          Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                        ),
-                    blendMode: BlendMode.srcIn,
-                    child: Text(
-                      'Experience',
-                      style: AppTextStyles.heroHeadingGradient.copyWith(
-                        fontSize: metrics.titleSize,
-                        fontWeight: FontWeight.w700,
-                        height: 1.06,
-                        letterSpacing: -0.8,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                leadingStyle: AppTextStyles.heroHeadingBase.copyWith(
+                  fontSize: metrics.titleSize,
+                  fontWeight: FontWeight.w700,
+                  height: 1.06,
+                  letterSpacing: -0.8,
+                ),
+                highlightedStyle: AppTextStyles.heroHeadingGradient.copyWith(
+                  fontSize: metrics.titleSize,
+                  fontWeight: FontWeight.w700,
+                  height: 1.06,
+                  letterSpacing: -0.8,
+                ),
               ),
               SizedBox(height: metrics.timelineTopGap),
               ..._items.asMap().entries.map((entry) {
@@ -179,10 +159,10 @@ class _ExperienceMetrics {
         sectionLabelSize: 14,
         titleSize: 26,
         timelineTopGap: 28,
-        timelineColumnWidth: 56,
-        timelineIconSize: 42,
+        timelineColumnWidth: 50,
+        timelineIconSize: 40,
         timelineIconInnerSize: 18,
-        timelineGap: 12,
+        timelineGap: 10,
         cardPadding: EdgeInsets.fromLTRB(16, 16, 16, 16),
         cardBottomGap: 22,
         roleSize: 18,
@@ -319,14 +299,12 @@ class _ExperienceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SectionCard(
       width: double.infinity,
       padding: metrics.cardPadding,
-      decoration: BoxDecoration(
-        color: AppColors.card.withValues(alpha: 0.78),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
-      ),
+      borderRadius: BorderRadius.circular(14),
+      backgroundColor: AppColors.card.withValues(alpha: 0.78),
+      borderColor: AppColors.border.withValues(alpha: 0.8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -454,17 +432,19 @@ class _DateMeta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+    return Wrap(
+      spacing: 6,
+      runSpacing: 4,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Icon(
           Icons.calendar_today_outlined,
           size: metrics.dateSize,
           color: AppColors.primary.withValues(alpha: 0.8),
         ),
-        const SizedBox(width: 6),
         Text(
           data.period,
+          softWrap: true,
           style: AppTextStyles.badge.copyWith(
             fontSize: metrics.dateSize,
             color: AppColors.primary.withValues(alpha: 0.8),
