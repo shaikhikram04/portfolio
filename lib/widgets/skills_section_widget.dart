@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
@@ -14,39 +15,73 @@ class SkillsSection extends StatelessWidget {
       skills: [
         _SkillData(
           label: 'Flutter',
-          value: 75,
-          icon: Icons.phone_android_rounded,
+          assetPath: 'assets/icons/flutter.svg',
+          iconBackground: Color(0x1A0D99FF),
         ),
-        _SkillData(label: 'Dart', value: 80, icon: Icons.code_rounded),
         _SkillData(
-          label: 'State Management',
-          value: 70,
-          icon: Icons.view_agenda_rounded,
+          label: 'Dart',
+          assetPath: 'assets/icons/dart.svg',
+          iconBackground: Color(0x1A0075C4),
+        ),
+        _SkillData(
+          label: 'Provider',
+          assetPath: 'assets/icons/dart.svg',
+          iconBackground: Color(0x1A0075C4),
+        ),
+        _SkillData(
+          label: 'GetX',
+          assetPath: 'assets/icons/getx.png',
+          iconBackground: Color(0x1A6B4CEB),
+        ),
+        _SkillData(
+          label: 'Riverpod',
+          assetPath: 'assets/icons/riverpod.svg',
+          iconBackground: Color(0x1A0075C4),
+        ),
+        _SkillData(
+          label: 'BLoC',
+          assetPath: 'assets/icons/bloc.svg',
+          iconBackground: Color(0x1A00A5A2),
         ),
       ],
     ),
     _SkillGroupData(
       title: 'BACKEND & APIS',
       skills: [
-        _SkillData(label: 'Firebase', value: 80, icon: Icons.flash_on_rounded),
-        _SkillData(label: 'Supabase', value: 70, icon: Icons.storage_rounded),
-        _SkillData(label: 'Node.js', value: 40, icon: Icons.memory_rounded),
-        _SkillData(label: 'REST APIs', value: 70, icon: Icons.language_rounded),
+        _SkillData(
+          label: 'Firebase',
+          assetPath: 'assets/icons/firebase.svg',
+          iconBackground: Color(0x18FFB300),
+        ),
+        _SkillData(
+          label: 'Supabase',
+          assetPath: 'assets/icons/supabase.svg',
+          iconBackground: Color(0x151AE5B6),
+        ),
+        _SkillData(
+          label: 'REST APIs',
+          assetPath: 'assets/icons/api.svg',
+          iconBackground: Color(0x24AEB6C2),
+        ),
       ],
     ),
     _SkillGroupData(
-      title: 'TOOLS',
+      title: 'TOOLS & PLATFORMS',
       skills: [
-        _SkillData(label: 'Git', value: 80, icon: Icons.alt_route_rounded),
         _SkillData(
-          label: 'AI Coding Tools',
-          value: 75,
-          icon: Icons.smart_toy_rounded,
+          label: 'Git',
+          assetPath: 'assets/icons/git.svg',
+          iconBackground: Color(0x17F04F33),
         ),
         _SkillData(
-          label: 'Localization',
-          value: 80,
-          icon: Icons.translate_rounded,
+          label: 'VS Code',
+          assetPath: 'assets/icons/Visual_Studio_Code.svg',
+          iconBackground: Color(0x1A007ACC),
+        ),
+        _SkillData(
+          label: 'GitHub',
+          assetPath: 'assets/icons/github.svg',
+          iconBackground: Color(0x24AEB6C2),
         ),
       ],
     ),
@@ -124,7 +159,6 @@ class _SkillsSectionMetrics {
     required this.iconBoxSize,
     required this.iconSize,
     required this.skillLabelSize,
-    required this.skillValueSize,
   });
 
   final double horizontalPadding;
@@ -142,7 +176,6 @@ class _SkillsSectionMetrics {
   final double iconBoxSize;
   final double iconSize;
   final double skillLabelSize;
-  final double skillValueSize;
 
   static _SkillsSectionMetrics fromWidth(double width) {
     final titleSize = _titleSizeFromWidth(width);
@@ -158,13 +191,12 @@ class _SkillsSectionMetrics {
         groupBottomGap: 34,
         groupTitleSize: 14,
         groupTitleSpacing: 14,
-        skillGridSpacing: 16,
-        cardHeight: 100,
-        cardPadding: EdgeInsets.fromLTRB(18, 16, 18, 14),
-        iconBoxSize: 38,
+        skillGridSpacing: 24,
+        cardHeight: 120,
+        cardPadding: EdgeInsets.fromLTRB(18, 16, 18, 16),
+        iconBoxSize: 46,
         iconSize: 18,
-        skillLabelSize: 20,
-        skillValueSize: 12.6,
+        skillLabelSize: 16,
       );
     }
     if (width < 980) {
@@ -178,13 +210,12 @@ class _SkillsSectionMetrics {
         groupBottomGap: 34,
         groupTitleSize: 14,
         groupTitleSpacing: 14,
-        skillGridSpacing: 16,
-        cardHeight: 100,
-        cardPadding: EdgeInsets.fromLTRB(18, 16, 18, 14),
-        iconBoxSize: 38,
+        skillGridSpacing: 24,
+        cardHeight: 120,
+        cardPadding: EdgeInsets.fromLTRB(18, 16, 18, 16),
+        iconBoxSize: 46,
         iconSize: 18,
-        skillLabelSize: 20,
-        skillValueSize: 12.6,
+        skillLabelSize: 16,
       );
     }
     return _SkillsSectionMetrics(
@@ -197,13 +228,12 @@ class _SkillsSectionMetrics {
       groupBottomGap: 34,
       groupTitleSize: 14,
       groupTitleSpacing: 14,
-      skillGridSpacing: 16,
-      cardHeight: 100,
-      cardPadding: EdgeInsets.fromLTRB(18, 16, 18, 14),
-      iconBoxSize: 38,
+      skillGridSpacing: 24,
+      cardHeight: 120,
+      cardPadding: EdgeInsets.fromLTRB(18, 16, 18, 16),
+      iconBoxSize: 46,
       iconSize: 18,
-      skillLabelSize: 20,
-      skillValueSize: 12.6,
+      skillLabelSize: 16,
     );
   }
 
@@ -231,13 +261,13 @@ class _SkillGroupData {
 class _SkillData {
   const _SkillData({
     required this.label,
-    required this.value,
-    required this.icon,
+    required this.assetPath,
+    this.iconBackground,
   });
 
   final String label;
-  final int value;
-  final IconData icon;
+  final String assetPath;
+  final Color? iconBackground;
 }
 
 class _SkillGroup extends StatelessWidget {
@@ -263,11 +293,7 @@ class _SkillGroup extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final maxWidth = constraints.maxWidth;
-            final columns = maxWidth >= 1060
-                ? 3
-                : maxWidth >= 700
-                ? 2
-                : 1;
+            final columns = _columnsFor(maxWidth);
             final spacing = metrics.skillGridSpacing;
             final cardWidth = columns == 1
                 ? maxWidth
@@ -290,157 +316,109 @@ class _SkillGroup extends StatelessWidget {
       ],
     );
   }
+
+  int _columnsFor(double width) {
+    if (width >= 1220) {
+      return 4;
+    }
+    if (width >= 960) {
+      return 4;
+    }
+    if (width >= 680) {
+      return 3;
+    }
+    return 2;
+  }
 }
 
-class _SkillCard extends StatelessWidget {
+class _SkillCard extends StatefulWidget {
   const _SkillCard({required this.skill, required this.metrics});
 
   final _SkillData skill;
   final _SkillsSectionMetrics metrics;
 
   @override
+  State<_SkillCard> createState() => _SkillCardState();
+}
+
+class _SkillCardState extends State<_SkillCard> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    final fill = skill.value / 100;
-    final clampedFill = fill.clamp(0, 1).toDouble();
+    final normalBorder = AppColors.border.withValues(alpha: 0.8);
+    final hoverBorder = AppColors.primary.withValues(alpha: 0.42);
 
-    return SectionCard(
-      height: metrics.cardHeight,
-      padding: metrics.cardPadding,
-      borderRadius: BorderRadius.circular(12),
-      backgroundColor: AppColors.card.withValues(alpha: 0.78),
-      borderColor: AppColors.border.withValues(alpha: 0.8),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                width: metrics.iconBoxSize,
-                height: metrics.iconBoxSize,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: AppColors.primary.withValues(alpha: 0.12),
-                ),
-                child: Icon(
-                  skill.icon,
-                  size: metrics.iconSize,
-                  color: AppColors.primary,
-                ),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: TweenAnimationBuilder<Color?>(
+        tween: ColorTween(
+          begin: normalBorder,
+          end: _isHovered ? hoverBorder : normalBorder,
+        ),
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        builder: (context, borderColor, _) {
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOutCubic,
+            transform: Matrix4.translationValues(0, _isHovered ? -6 : 0, 0),
+            child: SectionCard(
+              height: widget.metrics.cardHeight,
+              padding: widget.metrics.cardPadding,
+              borderRadius: BorderRadius.circular(12),
+              backgroundColor: AppColors.card.withValues(alpha: 0.78),
+              borderColor: borderColor ?? normalBorder,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: widget.metrics.iconBoxSize,
+                    height: widget.metrics.iconBoxSize,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color:
+                          widget.skill.iconBackground ??
+                          AppColors.primary.withValues(alpha: 0.12),
+                    ),
+                    child: _SkillAssetIcon(assetPath: widget.skill.assetPath),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    widget.skill.label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.navLink.copyWith(
+                      fontSize: widget.metrics.skillLabelSize,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.textPrimary.withValues(alpha: 0.92),
+                      height: 1,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      skill.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.subtitleBase.copyWith(
-                        fontSize: metrics.skillLabelSize,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimary.withValues(alpha: 0.92),
-                        height: 1,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${skill.value}%',
-                      style: AppTextStyles.navLink.copyWith(
-                        fontSize: metrics.skillValueSize,
-                        color: AppColors.textMuted,
-                        fontWeight: FontWeight.w600,
-                        height: 1,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const Spacer(),
-          SizedBox(
-            height: 12,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                const bubbleSize = 10.0;
-                final bubbleLeft =
-                    (constraints.maxWidth * clampedFill - (bubbleSize / 2))
-                        .clamp(0.0, constraints.maxWidth - bubbleSize);
-
-                return Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.centerLeft,
-                  children: [
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      top: 2,
-                      child: Container(
-                        height: 8,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(999),
-                          color: AppColors.secondary.withValues(alpha: 0.72),
-                          border: Border.all(
-                            color: AppColors.border.withValues(alpha: 0.95),
-                            width: 1,
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(999),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: FractionallySizedBox(
-                              widthFactor: clampedFill,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: AppColors.primaryGradient,
-                                    begin: Alignment.centerLeft,
-                                    end: Alignment.centerRight,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: bubbleLeft,
-                      top: 1,
-                      child: Container(
-                        width: bubbleSize,
-                        height: bubbleSize,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: AppColors.primaryGradient,
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          border: Border.all(
-                            color: AppColors.primaryForeground.withValues(
-                              alpha: 0.6,
-                            ),
-                            width: 1,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.35),
-                              blurRadius: 8,
-                              spreadRadius: 0.5,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              },
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
+  }
+}
+
+class _SkillAssetIcon extends StatelessWidget {
+  const _SkillAssetIcon({required this.assetPath});
+
+  final String assetPath;
+
+  @override
+  Widget build(BuildContext context) {
+    if (assetPath.toLowerCase().endsWith('.svg')) {
+      return SvgPicture.asset(assetPath, fit: BoxFit.contain);
+    }
+
+    return Image.asset(assetPath, fit: BoxFit.contain);
   }
 }
