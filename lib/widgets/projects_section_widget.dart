@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/colors.dart';
 import 'section_backdrop_widget.dart';
@@ -16,14 +17,22 @@ class ProjectsSection extends StatelessWidget {
           'Cricket match management app with live scoring, player statistics, and team management. Real-time updates with seamless UX.',
       tags: ['Flutter', 'Dart', 'Firebase', 'Riverpod'],
       isPhoneFirst: true,
+      imagePath: 'assets/images/tracket_screenshot.webp',
+      sourceCodeUrl: 'https://github.com/shaikhikram04/Tracket',
+      liveDemoUrl: 'https://youtu.be/e38Fbj-7A4E?si=L-v5PVfEB0JguylC',
     ),
     _ProjectData(
       order: '02 / 02',
-      title: 'Movie Recommendation App',
+      title: 'Instagram Clone',
       description:
-          'Track watched movies and get personalized recommendations based on your rankings. Beautiful UI with smart content discovery.',
-      tags: ['Flutter', 'Dart', 'REST API', 'GetX'],
+          'Implemented core social media features including real-time chat, post feeds, explore functionality, and user profile management.',
+      tags: ['Flutter', 'Firebase', 'Riverpod'],
       isPhoneFirst: false,
+      imagePath: 'assets/images/instagram_clone_screenshot.webp',
+      showTopPadding: true,
+      sourceCodeUrl: 'https://github.com/shaikhikram04/Instagram-Clone',
+      liveDemoUrl:
+          'https://www.linkedin.com/posts/ikram-kolekar-95b5b0250_flutter-firebase-mobileappdevelopment-ugcPost-7258487385871581184-2uZi?utm_source=share&utm_medium=member_desktop&rcm=ACoAAD4GPFcBUQDSGMjc6rjE_eb1EZWBHQXApI4',
     ),
   ];
 
@@ -252,6 +261,10 @@ class _ProjectData {
     required this.description,
     required this.tags,
     required this.isPhoneFirst,
+    required this.imagePath,
+    required this.sourceCodeUrl,
+    required this.liveDemoUrl,
+    this.showTopPadding = false,
   });
 
   final String order;
@@ -259,6 +272,10 @@ class _ProjectData {
   final String description;
   final List<String> tags;
   final bool isPhoneFirst;
+  final String imagePath;
+  final String sourceCodeUrl;
+  final String liveDemoUrl;
+  final bool showTopPadding;
 }
 
 class _ProjectRow extends StatelessWidget {
@@ -269,7 +286,11 @@ class _ProjectRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final phone = _ProjectPhoneCard(title: project.title, metrics: metrics);
+    final phone = _ProjectPhoneCard(
+      imagePath: project.imagePath,
+      metrics: metrics,
+      enableVerticalPadding: project.showTopPadding,
+    );
     final details = _ProjectDetails(project: project, metrics: metrics);
 
     if (metrics.isMobile) {
@@ -304,6 +325,20 @@ class _ProjectDetails extends StatelessWidget {
 
   final _ProjectData project;
   final _ProjectsSectionMetrics metrics;
+
+  Future<void> _launchProjectUrl(BuildContext context, String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Unable to open link.')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -354,12 +389,14 @@ class _ProjectDetails extends StatelessWidget {
               icon: FontAwesomeIcons.github,
               filled: false,
               metrics: metrics,
+              onTap: () => _launchProjectUrl(context, project.sourceCodeUrl),
             ),
             _ActionButton(
               label: 'Live Demo',
               icon: Icons.open_in_new_rounded,
               filled: true,
               metrics: metrics,
+              onTap: () => _launchProjectUrl(context, project.liveDemoUrl),
             ),
           ],
         ),
@@ -369,10 +406,15 @@ class _ProjectDetails extends StatelessWidget {
 }
 
 class _ProjectPhoneCard extends StatelessWidget {
-  const _ProjectPhoneCard({required this.title, required this.metrics});
+  const _ProjectPhoneCard({
+    required this.imagePath,
+    required this.metrics,
+    this.enableVerticalPadding = false,
+  });
 
-  final String title;
+  final String imagePath;
   final _ProjectsSectionMetrics metrics;
+  final bool enableVerticalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -403,96 +445,43 @@ class _ProjectPhoneCard extends StatelessWidget {
             height: cardH,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(36),
-              color: AppColors.surface.withValues(alpha: 0.94),
+              color: const Color.fromARGB(
+                255,
+                13,
+                16,
+                21,
+              ).withValues(alpha: 0.94),
               border: Border.all(
                 color: Colors.white.withValues(alpha: 0.06),
                 width: 1.2,
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.all(12),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(28),
-                  color: AppColors.secondary.withValues(alpha: 0.78),
+                  color: Colors.black,
                   border: Border.all(
                     color: Colors.white.withValues(alpha: 0.04),
                     width: 1,
                   ),
                 ),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 12),
-                    Container(
-                      width: 76,
-                      height: 20,
-                      decoration: BoxDecoration(
-                        color: AppColors.background.withValues(alpha: 0.82),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                    const SizedBox(height: 72),
-                    Icon(
-                      Icons.phone_android_rounded,
-                      color: AppColors.primary,
-                      size: 30,
-                    ),
-                    const SizedBox(height: 14),
-                    Text(
-                      title,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.subtitleAnimated.copyWith(
-                        fontSize: 38 * 0.7,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primary.withValues(alpha: 0.92),
-                        height: 1.4,
-                      ),
-                    ),
-                    const SizedBox(height: 26),
-                    _line(width: 130),
-                    const SizedBox(height: 9),
-                    _line(width: 112),
-                    const SizedBox(height: 9),
-                    _line(width: 86),
-                    const SizedBox(height: 34),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _dot(AppColors.primary.withValues(alpha: 0.35)),
-                        const SizedBox(width: 10),
-                        _dot(AppColors.accent.withValues(alpha: 0.35)),
-                        const SizedBox(width: 10),
-                        _dot(AppColors.primary.withValues(alpha: 0.32)),
-                      ],
-                    ),
-                  ],
+                padding: enableVerticalPadding
+                    ? const EdgeInsets.symmetric(vertical: 12)
+                    : EdgeInsets.zero,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(28),
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
+                  ),
                 ),
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _line({required double width}) {
-    return Container(
-      width: width,
-      height: 7,
-      decoration: BoxDecoration(
-        color: AppColors.border.withValues(alpha: 0.45),
-        borderRadius: BorderRadius.circular(8),
-      ),
-    );
-  }
-
-  Widget _dot(Color color) {
-    return Container(
-      width: 30,
-      height: 30,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(11),
       ),
     );
   }
@@ -533,12 +522,14 @@ class _ActionButton extends StatefulWidget {
     required this.icon,
     required this.filled,
     required this.metrics,
+    required this.onTap,
   });
 
   final String label;
   final IconData icon;
   final bool filled;
   final _ProjectsSectionMetrics metrics;
+  final VoidCallback onTap;
 
   @override
   State<_ActionButton> createState() => _ActionButtonState();
@@ -554,7 +545,7 @@ class _ActionButtonState extends State<_ActionButton> {
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
       child: GestureDetector(
-        onTap: () {},
+        onTap: widget.onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
           padding: EdgeInsets.symmetric(

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
 import '../theme/app_text_styles.dart';
-import 'section_card_widget.dart';
 import 'section_header_widget.dart';
 
 class ExperienceSection extends StatelessWidget {
@@ -291,48 +290,56 @@ class _TimelineIcon extends StatelessWidget {
   }
 }
 
-class _ExperienceCard extends StatelessWidget {
+class _ExperienceCard extends StatefulWidget {
   const _ExperienceCard({required this.data, required this.metrics});
 
   final _ExperienceData data;
   final _ExperienceMetrics metrics;
 
   @override
+  State<_ExperienceCard> createState() => _ExperienceCardState();
+}
+
+class _ExperienceCardState extends State<_ExperienceCard> {
+  bool _isHovered = false;
+
+  @override
   Widget build(BuildContext context) {
-    return SectionCard(
-      width: double.infinity,
-      padding: metrics.cardPadding,
-      borderRadius: BorderRadius.circular(14),
-      backgroundColor: AppColors.card.withValues(alpha: 0.78),
-      borderColor: AppColors.border.withValues(alpha: 0.8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (metrics.isMobile)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  data.role,
-                  style: AppTextStyles.heroHeadingBase.copyWith(
-                    fontSize: metrics.roleSize,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: -0.4,
-                    height: 1.1,
+    final data = widget.data;
+    final metrics = widget.metrics;
+
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: AppColors.card.withValues(alpha: 0.78),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: _isHovered
+                ? AppColors.primary.withValues(alpha: 0.4)
+                : AppColors.border.withValues(alpha: 0.8),
+          ),
+          boxShadow: _isHovered
+              ? [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.22),
+                    blurRadius: 14,
                   ),
-                ),
-                const SizedBox(height: 8),
-                _CompanyMeta(data: data, metrics: metrics),
-                const SizedBox(height: 10),
-                _DateMeta(data: data, metrics: metrics),
-              ],
-            )
-          else
-            Row(
+                ]
+              : const [],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Padding(
+            padding: metrics.cardPadding,
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
+                if (metrics.isMobile)
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
@@ -340,50 +347,78 @@ class _ExperienceCard extends StatelessWidget {
                         style: AppTextStyles.heroHeadingBase.copyWith(
                           fontSize: metrics.roleSize,
                           fontWeight: FontWeight.w500,
-                          letterSpacing: 1,
+                          letterSpacing: -0.4,
                           height: 1.1,
                         ),
                       ),
                       const SizedBox(height: 8),
                       _CompanyMeta(data: data, metrics: metrics),
+                      const SizedBox(height: 10),
+                      _DateMeta(data: data, metrics: metrics),
+                    ],
+                  )
+                else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data.role,
+                              style: AppTextStyles.heroHeadingBase.copyWith(
+                                fontSize: metrics.roleSize,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 1,
+                                height: 1.1,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            _CompanyMeta(data: data, metrics: metrics),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      _DateMeta(data: data, metrics: metrics),
                     ],
                   ),
+                SizedBox(height: metrics.isMobile ? 14 : 16),
+                ...data.points.map(
+                  (point) => Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4),
+                          child: Icon(
+                            Icons.play_arrow_rounded,
+                            size: metrics.pointSize - 1,
+                            color: AppColors.primary.withValues(alpha: 0.9),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            point,
+                            style: AppTextStyles.bodyDescription.copyWith(
+                              fontSize: metrics.pointSize,
+                              color: AppColors.textMuted.withValues(
+                                alpha: 0.92,
+                              ),
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 12),
-                _DateMeta(data: data, metrics: metrics),
               ],
             ),
-          SizedBox(height: metrics.isMobile ? 14 : 16),
-          ...data.points.map(
-            (point) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Icon(
-                      Icons.play_arrow_rounded,
-                      size: metrics.pointSize - 1,
-                      color: AppColors.primary.withValues(alpha: 0.9),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      point,
-                      style: AppTextStyles.bodyDescription.copyWith(
-                        fontSize: metrics.pointSize,
-                        color: AppColors.textMuted.withValues(alpha: 0.92),
-                        height: 1.5,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ),
-        ],
+        ),
       ),
     );
   }
