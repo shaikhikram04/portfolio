@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ikram_portfolio/widgets/social_row.dart';
+import 'package:ikram_portfolio/app/theme/app_text_styles.dart';
+import 'package:ikram_portfolio/common/widgets/hover_gradient_button.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
+import 'package:ikram_portfolio/common/widgets/portfolio_logo_widget.dart';
+import 'package:ikram_portfolio/common/widgets/section_backdrop_widget.dart';
+import 'package:ikram_portfolio/common/widgets/social_row.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../constants/colors.dart';
-import 'portfolio_logo_widget.dart';
-import 'section_backdrop_widget.dart';
-import '../theme/app_text_styles.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
@@ -470,43 +470,22 @@ class _FieldBlock extends StatelessWidget {
   }
 }
 
-class _SendMessageButton extends StatefulWidget {
+class _SendMessageButton extends StatelessWidget {
   const _SendMessageButton({required this.metrics});
 
   final _ContactSectionMetrics metrics;
 
   @override
-  State<_SendMessageButton> createState() => _SendMessageButtonState();
-}
-
-class _SendMessageButtonState extends State<_SendMessageButton> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: () {},
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          width: widget.metrics.sendButtonWidth,
-          height: widget.metrics.sendButtonHeight,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            gradient: LinearGradient(
-              colors: _hovered
-                  ? AppColors.highlightGradient
-                  : AppColors.primaryGradient,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: _hovered ? const [0.3, 0.9] : const [0.2, 0.9],
-            ),
-          ),
+    return HoverGradientButton(
+      onTap: () {},
+      width: metrics.sendButtonWidth,
+      height: metrics.sendButtonHeight,
+      child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
                 Icons.send_rounded,
@@ -809,13 +788,11 @@ class _FooterSocialButton extends StatefulWidget {
     required this.icon,
     required this.onTap,
     required this.metrics,
-    this.isFontAwesome = true,
   });
 
   final IconData icon;
   final VoidCallback onTap;
   final _ContactSectionMetrics metrics;
-  final bool isFontAwesome;
 
   @override
   State<_FooterSocialButton> createState() => _FooterSocialButtonState();
@@ -847,21 +824,13 @@ class _FooterSocialButtonState extends State<_FooterSocialButton> {
             ),
           ),
           child: Center(
-            child: widget.isFontAwesome
-                ? FaIcon(
-                    widget.icon,
-                    size: widget.metrics.iconButtonSize * 0.36,
-                    color: _hovered
-                        ? AppColors.primary
-                        : AppColors.textSecondary.withValues(alpha: 0.9),
-                  )
-                : Icon(
-                    widget.icon,
-                    size: widget.metrics.iconButtonSize * 0.4,
-                    color: _hovered
-                        ? AppColors.primary
-                        : AppColors.textSecondary.withValues(alpha: 0.9),
-                  ),
+            child: Icon(
+              widget.icon,
+              size: widget.metrics.iconButtonSize * 0.4,
+              color: _hovered
+                  ? AppColors.primary
+                  : AppColors.textSecondary.withValues(alpha: 0.9),
+            ),
           ),
         ),
       ),

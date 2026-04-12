@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../constants/colors.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
 
 /// Centralised text-style definitions.
 ///

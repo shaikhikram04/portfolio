@@ -1,9 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import '../constants/colors.dart';
-import 'portfolio_logo_widget.dart';
-import '../theme/app_text_styles.dart';
+import 'package:ikram_portfolio/app/theme/app_text_styles.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
+import 'package:ikram_portfolio/features/home/home_sections.dart';
+import 'package:ikram_portfolio/common/widgets/portfolio_logo_widget.dart';
 
 /// Responsive top navigation bar.
 ///
@@ -26,14 +27,7 @@ class PortfolioNavBar extends StatefulWidget {
 }
 
 class _PortfolioNavBarState extends State<PortfolioNavBar> {
-  static const List<String> _sections = [
-    'Home',
-    'About',
-    'Projects',
-    'Skills',
-    'Experience',
-    'Contact',
-  ];
+  static const List<String> _sections = HomeSections.all;
 
   String _hoveredLink = '';
 
@@ -130,21 +124,14 @@ class _PortfolioNavBarState extends State<PortfolioNavBar> {
 class PortfolioDrawer extends StatelessWidget {
   const PortfolioDrawer({
     super.key,
-    this.activeSection = 'Home',
+    this.activeSection = HomeSections.home,
     this.onSectionTap,
   });
 
   final String activeSection;
   final ValueChanged<String>? onSectionTap;
 
-  static const List<String> _sections = [
-    'Home',
-    'About',
-    'Projects',
-    'Skills',
-    'Experience',
-    'Contact',
-  ];
+  static const List<String> _sections = HomeSections.all;
 
   @override
   Widget build(BuildContext context) {

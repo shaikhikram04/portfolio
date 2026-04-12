@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../constants/colors.dart';
-import '../theme/app_text_styles.dart';
-import 'section_card_widget.dart';
-import 'section_header_widget.dart';
+import 'package:ikram_portfolio/app/theme/app_text_styles.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
+import 'package:ikram_portfolio/common/widgets/section_card_widget.dart';
+import 'package:ikram_portfolio/common/widgets/section_header_widget.dart';
 
 class AboutDeveloperSection extends StatelessWidget {
   const AboutDeveloperSection({super.key});

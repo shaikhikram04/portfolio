@@ -1,10 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:ikram_portfolio/widgets/social_row.dart';
+import 'package:ikram_portfolio/app/theme/app_text_styles.dart';
+import 'package:ikram_portfolio/common/widgets/hover_gradient_button.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
+import 'package:ikram_portfolio/core/utils/resume_downloader.dart';
+import 'package:ikram_portfolio/common/widgets/social_row.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../constants/colors.dart';
-import '../theme/app_text_styles.dart';
-import '../utils/resume_downloader.dart';
 
 /// Full-height hero / landing section displayed below the navbar.
 class HeroSection extends StatelessWidget {
@@ -369,44 +370,18 @@ class _CtaButtons extends StatelessWidget {
 }
 
 /// Teal→purple gradient fill button.
-class _GradientButton extends StatefulWidget {
+class _GradientButton extends StatelessWidget {
   const _GradientButton({required this.label, required this.onTap});
 
   final String label;
   final VoidCallback onTap;
 
   @override
-  State<_GradientButton> createState() => _GradientButtonState();
-}
-
-class _GradientButtonState extends State<_GradientButton> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            gradient: LinearGradient(
-              colors: _hovered
-                  ? AppColors.highlightGradient
-                  : AppColors.primaryGradient,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: _hovered ? const [0.3, 0.9] : const [0.2, 0.9],
-            ),
-          ),
-          child: Text(widget.label, style: AppTextStyles.buttonPrimary),
-        ),
-      ),
+    return HoverGradientButton(
+      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+      child: Text(label, style: AppTextStyles.buttonPrimary),
     );
   }
 }

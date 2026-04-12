@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../constants/colors.dart';
-import '../theme/app_text_styles.dart';
+import 'package:ikram_portfolio/app/theme/app_text_styles.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
 
 class PortfolioLogoText extends StatelessWidget {
   const PortfolioLogoText({super.key});

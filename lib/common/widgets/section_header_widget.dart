@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../constants/colors.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
 
 class SectionHeader extends StatelessWidget {
   const SectionHeader({

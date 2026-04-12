@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-import '../constants/colors.dart';
-import '../theme/app_text_styles.dart';
-import 'section_header_widget.dart';
+import 'package:ikram_portfolio/app/theme/app_text_styles.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
+import 'package:ikram_portfolio/common/widgets/section_header_widget.dart';
 
 class ExperienceSection extends StatelessWidget {
   const ExperienceSection({super.key});

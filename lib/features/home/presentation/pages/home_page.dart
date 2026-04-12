@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'constants/colors.dart';
-import 'widgets/about_developer_section_widget.dart';
-import 'widgets/background_decorations_widget.dart';
-import 'widgets/hero_section_widget.dart';
-import 'widgets/navbar_widget.dart';
-import 'widgets/projects_section_widget.dart';
-import 'widgets/skills_section_widget.dart';
-import 'widgets/experience_section_widget.dart';
-import 'widgets/contact_section_widget.dart';
+import 'package:ikram_portfolio/core/constants/app_colors.dart';
+import 'package:ikram_portfolio/features/home/home_sections.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/about_developer_section_widget.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/background_decorations_widget.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/contact_section_widget.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/experience_section_widget.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/hero_section_widget.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/navbar_widget.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/projects_section_widget.dart';
+import 'package:ikram_portfolio/features/home/presentation/widgets/skills_section_widget.dart';
 
 /// Root page of the portfolio.
 ///
@@ -32,12 +33,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _sectionKeys = {
-      'Home': GlobalKey(),
-      'About': GlobalKey(),
-      'Projects': GlobalKey(),
-      'Skills': GlobalKey(),
-      'Experience': GlobalKey(),
-      'Contact': GlobalKey(),
+      HomeSections.home: GlobalKey(),
+      HomeSections.about: GlobalKey(),
+      HomeSections.projects: GlobalKey(),
+      HomeSections.skills: GlobalKey(),
+      HomeSections.experience: GlobalKey(),
+      HomeSections.contact: GlobalKey(),
     };
     _scrollController = ScrollController()..addListener(_onScroll);
   }
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   void _scrollToSection(String section) {
     if (!_scrollController.hasClients) return;
 
-    if (section == 'Home') {
+    if (section == HomeSections.home) {
       _scrollController.animateTo(
         0,
         duration: const Duration(milliseconds: 450),
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.background,
       drawer: PortfolioDrawer(
-        activeSection: 'Home',
+        activeSection: HomeSections.home,
         onSectionTap: _scrollToSection,
       ),
       body: Stack(
@@ -107,7 +108,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 SizedBox(
-                  key: _sectionKeys['Home'],
+                  key: _sectionKeys[HomeSections.home],
                   height: viewportHeight,
                   child: Stack(
                     children: [
@@ -118,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                           Expanded(
                             child: HeroSection(
                               onViewProjectsTap: () =>
-                                  _scrollToSection('Projects'),
+                                  _scrollToSection(HomeSections.projects),
                             ),
                           ),
                         ],
@@ -128,19 +129,19 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // About / developer profile section
-                AboutDeveloperSection(key: _sectionKeys['About']),
+                AboutDeveloperSection(key: _sectionKeys[HomeSections.about]),
 
                 // Projects showcase section
-                ProjectsSection(key: _sectionKeys['Projects']),
+                ProjectsSection(key: _sectionKeys[HomeSections.projects]),
 
                 // Skills section
-                SkillsSection(key: _sectionKeys['Skills']),
+                SkillsSection(key: _sectionKeys[HomeSections.skills]),
 
                 // Experience section
-                ExperienceSection(key: _sectionKeys['Experience']),
+                ExperienceSection(key: _sectionKeys[HomeSections.experience]),
 
                 // Contact section
-                ContactSection(key: _sectionKeys['Contact']),
+                ContactSection(key: _sectionKeys[HomeSections.contact]),
               ],
             ),
           ),
@@ -151,7 +152,7 @@ class _HomePageState extends State<HomePage> {
             left: 0,
             right: 0,
             child: PortfolioNavBar(
-              activeSection: 'Home',
+              activeSection: HomeSections.home,
               isScrolled: _hasScrolled,
               onSectionTap: _scrollToSection,
             ),
