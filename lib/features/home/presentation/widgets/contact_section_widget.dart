@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ikram_portfolio/app/theme/app_text_styles.dart';
-import 'package:ikram_portfolio/common/widgets/hover_gradient_button.dart';
 import 'package:ikram_portfolio/core/constants/app_colors.dart';
 import 'package:ikram_portfolio/common/widgets/portfolio_logo_widget.dart';
 import 'package:ikram_portfolio/common/widgets/section_backdrop_widget.dart';
@@ -44,32 +43,26 @@ class ContactSection extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _SectionHeading(metrics: metrics),
-                        SizedBox(height: metrics.cardsTopGap),
                         metrics.isMobile
                             ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  _ContactFormCard(metrics: metrics),
-                                  SizedBox(height: metrics.cardsGap),
+                                  _SectionHeading(metrics: metrics),
+                                  SizedBox(height: metrics.cardsTopGap),
                                   _ConnectCard(metrics: metrics),
                                 ],
                               )
-                            : IntrinsicHeight(
-                                child: Row(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Expanded(
-                                      flex: 8,
-                                      child: _ContactFormCard(metrics: metrics),
-                                    ),
-                                    SizedBox(width: metrics.cardsGap),
-                                    Expanded(
-                                      flex: 5,
-                                      child: _ConnectCard(metrics: metrics),
-                                    ),
-                                  ],
-                                ),
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: _SectionHeading(metrics: metrics),
+                                  ),
+                                  SizedBox(width: metrics.cardsGap),
+                                  Expanded(
+                                    child: _ConnectCard(metrics: metrics),
+                                  ),
+                                ],
                               ),
                       ],
                     ),
@@ -255,22 +248,21 @@ class _SectionHeading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Center(
-          child: Text(
+    return Padding(
+      padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.05),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
             '// contact',
             style: AppTextStyles.badge.copyWith(
               fontSize: metrics.sectionLabelSize,
               color: AppColors.primary.withValues(alpha: 0.95),
             ),
           ),
-        ),
-        const SizedBox(height: 12),
-        Center(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
+          const SizedBox(height: 16),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               Text(
                 'Get in ',
@@ -304,202 +296,20 @@ class _SectionHeading extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        const SizedBox(height: 18),
-        Center(
-          child: Text(
-            "Have an idea for an app? Let's build it together.",
-            textAlign: TextAlign.center,
-            style: AppTextStyles.bodyDescription.copyWith(
-              fontSize: metrics.subtitleSize,
-              color: AppColors.textMuted,
+          const SizedBox(height: 22),
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: metrics.isMobile ? 560 : 520),
+            child: Text(
+              "Have an idea for an app? Let's build it together. I'm always open to discussing new projects, creative ideas, or opportunities.",
+              textAlign: TextAlign.start,
+              style: AppTextStyles.bodyDescription.copyWith(
+                fontSize: metrics.subtitleSize,
+                color: AppColors.textMuted,
+                height: 1.45,
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class _ContactFormCard extends StatelessWidget {
-  const _ContactFormCard({required this.metrics});
-
-  final _ContactSectionMetrics metrics;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: metrics.formCardPadding,
-      decoration: BoxDecoration(
-        color: AppColors.card.withValues(alpha: 0.78),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border.withValues(alpha: 0.8)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          metrics.isMobile
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _FieldBlock(
-                      label: 'name',
-                      hint: 'Your name',
-                      metrics: metrics,
-                    ),
-                    const SizedBox(height: 12),
-                    _FieldBlock(
-                      label: 'email',
-                      hint: 'your@email.com',
-                      metrics: metrics,
-                    ),
-                  ],
-                )
-              : Row(
-                  children: [
-                    Expanded(
-                      child: _FieldBlock(
-                        label: 'name',
-                        hint: 'Your name',
-                        metrics: metrics,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: _FieldBlock(
-                        label: 'email',
-                        hint: 'your@email.com',
-                        metrics: metrics,
-                      ),
-                    ),
-                  ],
-                ),
-          const SizedBox(height: 22),
-          _FieldBlock(
-            label: 'message',
-            hint: 'Tell me about your project...',
-            maxLines: 6,
-            minLines: 6,
-            fixedHeight: metrics.messageFieldHeight,
-            metrics: metrics,
-          ),
-          const SizedBox(height: 32),
-          _SendMessageButton(metrics: metrics),
         ],
-      ),
-    );
-  }
-}
-
-class _FieldBlock extends StatelessWidget {
-  const _FieldBlock({
-    required this.label,
-    required this.hint,
-    required this.metrics,
-    this.maxLines = 1,
-    this.minLines = 1,
-    this.fixedHeight,
-  });
-
-  final String label;
-  final String hint;
-  final _ContactSectionMetrics metrics;
-  final int maxLines;
-  final int minLines;
-  final double? fixedHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    final field = TextField(
-      minLines: minLines,
-      maxLines: maxLines,
-      style: AppTextStyles.bodyDescription.copyWith(
-        fontSize: metrics.fieldTextSize,
-        color: AppColors.textPrimary.withValues(alpha: 0.92),
-        height: 1.25,
-      ),
-      cursorColor: AppColors.primary,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: AppColors.secondary.withValues(alpha: 0.85),
-        hintText: hint,
-        hintStyle: AppTextStyles.bodyDescription.copyWith(
-          fontSize: metrics.fieldTextSize,
-          color: AppColors.textMuted.withValues(alpha: 0.82),
-          height: 1.25,
-        ),
-        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 18),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.border.withValues(alpha: 0.8),
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            color: AppColors.border.withValues(alpha: 0.8),
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.2),
-        ),
-      ),
-    );
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: AppTextStyles.badge.copyWith(
-            fontSize: metrics.fieldLabelSize,
-            color: AppColors.textMuted.withValues(alpha: 0.9),
-            letterSpacing: 0.35,
-          ),
-        ),
-        const SizedBox(height: 8),
-        if (fixedHeight != null)
-          SizedBox(height: fixedHeight, child: field)
-        else
-          field,
-      ],
-    );
-  }
-}
-
-class _SendMessageButton extends StatelessWidget {
-  const _SendMessageButton({required this.metrics});
-
-  final _ContactSectionMetrics metrics;
-
-  @override
-  Widget build(BuildContext context) {
-    return HoverGradientButton(
-      onTap: () {},
-      width: metrics.sendButtonWidth,
-      height: metrics.sendButtonHeight,
-      child: Center(
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.send_rounded,
-                size: 16,
-                color: AppColors.primaryForeground,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Send Message',
-                style: AppTextStyles.buttonPrimary.copyWith(fontSize: 14),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
