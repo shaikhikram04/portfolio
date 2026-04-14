@@ -50,7 +50,12 @@ class ProjectsSection extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          const Positioned.fill(child: SectionBackdrop()),
+          Positioned.fill(
+            child: SectionBackdrop(
+              yOffset: metrics.isMobile ? -1.05 : -1.5,
+              radius: metrics.isMobile ? 1.25 : 1,
+            ),
+          ),
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: metrics.horizontalPadding,

@@ -84,6 +84,7 @@ class _SectionMetrics {
     required this.titleSize,
     required this.aboutLabelSize,
     required this.blockGap,
+    required this.infoIconSize,
     required this.statTitleSize,
     required this.statValueSize,
     required this.isMobile,
@@ -93,6 +94,7 @@ class _SectionMetrics {
   final double titleSize;
   final double aboutLabelSize;
   final double blockGap;
+  final double infoIconSize;
   final double statTitleSize;
   final double statValueSize;
   final bool isMobile;
@@ -104,8 +106,9 @@ class _SectionMetrics {
         titleSize: 26,
         aboutLabelSize: 14,
         blockGap: 20,
-        statTitleSize: 10,
-        statValueSize: 14,
+        infoIconSize: 22,
+        statTitleSize: 12,
+        statValueSize: 16,
         isMobile: true,
       );
     }
@@ -115,8 +118,9 @@ class _SectionMetrics {
         titleSize: 30,
         aboutLabelSize: 14,
         blockGap: 22,
+        infoIconSize: 22,
         statTitleSize: 12,
-        statValueSize: 15,
+        statValueSize: 16,
         isMobile: true,
       );
     }
@@ -126,6 +130,7 @@ class _SectionMetrics {
         titleSize: 30,
         aboutLabelSize: 14,
         blockGap: 22,
+        infoIconSize: 20,
         statTitleSize: 12,
         statValueSize: 15,
         isMobile: false,
@@ -136,6 +141,7 @@ class _SectionMetrics {
       titleSize: 32,
       aboutLabelSize: 14,
       blockGap: 24,
+      infoIconSize: 22,
       statTitleSize: 12,
       statValueSize: 16,
       isMobile: false,
@@ -434,7 +440,11 @@ class _InfoCardState extends State<_InfoCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(widget.data.icon, color: AppColors.primary, size: 22),
+                Icon(
+                  widget.data.icon,
+                  color: AppColors.primary,
+                  size: widget.metrics.infoIconSize,
+                ),
                 const SizedBox(height: 9),
                 Text(
                   widget.data.label,

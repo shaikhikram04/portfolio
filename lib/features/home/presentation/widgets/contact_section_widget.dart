@@ -26,8 +26,11 @@ class ContactSection extends StatelessWidget {
       padding: EdgeInsets.only(top: metrics.sectionTopPadding),
       child: Stack(
         children: [
-          const Positioned.fill(
-            child: SectionBackdrop(yOffset: -1.8, radius: 1.7),
+          Positioned.fill(
+            child: SectionBackdrop(
+              yOffset: metrics.isMobile ? -1.15 : -1.8,
+              radius: metrics.isMobile ? 1.9 : 1.7,
+            ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(

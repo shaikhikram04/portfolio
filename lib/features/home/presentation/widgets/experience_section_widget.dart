@@ -466,10 +466,8 @@ class _DateMeta extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
+    return Row(
       spacing: 6,
-      runSpacing: 4,
-      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Icon(
           Icons.calendar_today_outlined,

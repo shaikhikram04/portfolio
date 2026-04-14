@@ -24,12 +24,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   static const double _navBarHeight = 88;
+  static const double _menuButtonBreakpoint = 900;
+  static const double _sectionScrollAnchorOffset = _navBarHeight - 58;
 
   late final ScrollController _scrollController;
   late final Map<String, GlobalKey> _sectionKeys;
   late final Map<String, bool> _revealedSections;
+  String _activeSection = HomeSections.home;
   bool _hasScrolled = false;
   bool _heroVisible = false;
+  bool _isProgrammaticScroll = false;
 
   @override
   void initState() {
@@ -61,12 +65,23 @@ class _HomePageState extends State<HomePage> {
   void _scrollToSection(String section) {
     if (!_scrollController.hasClients) return;
 
+    if (_activeSection != section) {
+      setState(() => _activeSection = section);
+    }
+
+    _isProgrammaticScroll = true;
+
     if (section == HomeSections.home) {
-      _scrollController.animateTo(
-        0,
-        duration: const Duration(milliseconds: 450),
-        curve: Curves.easeInOut,
-      );
+      _scrollController
+          .animateTo(
+            0,
+            duration: const Duration(milliseconds: 450),
+            curve: Curves.easeInOut,
+          )
+          .whenComplete(() {
+            _isProgrammaticScroll = false;
+            _updateActiveSectionFromScroll();
+          });
       return;
     }
 
@@ -76,18 +91,28 @@ class _HomePageState extends State<HomePage> {
     final renderBox = targetContext.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
-    final targetOffset =
+    final rawTargetOffset =
         renderBox.localToGlobal(Offset.zero).dy + _scrollController.offset;
+    final isMenuButtonLayout =
+        MediaQuery.sizeOf(context).width < _menuButtonBreakpoint;
+    final targetOffset = isMenuButtonLayout
+        ? rawTargetOffset - _sectionScrollAnchorOffset
+        : rawTargetOffset;
 
     final clamped = targetOffset.clamp(
       0.0,
       _scrollController.position.maxScrollExtent,
     );
-    _scrollController.animateTo(
-      clamped,
-      duration: const Duration(milliseconds: 550),
-      curve: Curves.easeInOutCubic,
-    );
+    _scrollController
+        .animateTo(
+          clamped,
+          duration: const Duration(milliseconds: 550),
+          curve: Curves.easeInOutCubic,
+        )
+        .whenComplete(() {
+          _isProgrammaticScroll = false;
+          _updateActiveSectionFromScroll();
+        });
   }
 
   void _onScroll() {
@@ -96,7 +121,37 @@ class _HomePageState extends State<HomePage> {
       setState(() => _hasScrolled = next);
     }
 
+    if (!_isProgrammaticScroll) {
+      _updateActiveSectionFromScroll();
+    }
+
     _updateRevealedSections();
+  }
+
+  void _updateActiveSectionFromScroll() {
+    if (!mounted) return;
+
+    String nextSection = HomeSections.home;
+    double bestTop = double.negativeInfinity;
+    const anchor = _sectionScrollAnchorOffset;
+
+    for (final section in HomeSections.all) {
+      final targetContext = _sectionKeys[section]?.currentContext;
+      if (targetContext == null) continue;
+
+      final renderBox = targetContext.findRenderObject() as RenderBox?;
+      if (renderBox == null || !renderBox.hasSize) continue;
+
+      final top = renderBox.localToGlobal(Offset.zero).dy;
+      if (top <= anchor && top > bestTop) {
+        bestTop = top;
+        nextSection = section;
+      }
+    }
+
+    if (nextSection != _activeSection) {
+      setState(() => _activeSection = nextSection);
+    }
   }
 
   void _updateRevealedSections() {
@@ -150,7 +205,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.background,
       drawer: PortfolioDrawer(
-        activeSection: HomeSections.home,
+        activeSection: _activeSection,
         onSectionTap: _scrollToSection,
       ),
       body: Stack(
@@ -235,7 +290,7 @@ class _HomePageState extends State<HomePage> {
             left: 0,
             right: 0,
             child: PortfolioNavBar(
-              activeSection: HomeSections.home,
+              activeSection: _activeSection,
               isScrolled: _hasScrolled,
               onSectionTap: _scrollToSection,
             ),
