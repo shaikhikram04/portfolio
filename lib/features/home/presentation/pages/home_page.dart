@@ -27,7 +27,9 @@ class _HomePageState extends State<HomePage> {
 
   late final ScrollController _scrollController;
   late final Map<String, GlobalKey> _sectionKeys;
+  late final Map<String, bool> _revealedSections;
   bool _hasScrolled = false;
+  bool _heroVisible = false;
 
   @override
   void initState() {
@@ -40,7 +42,20 @@ class _HomePageState extends State<HomePage> {
       HomeSections.experience: GlobalKey(),
       HomeSections.contact: GlobalKey(),
     };
+    _revealedSections = {
+      HomeSections.about: false,
+      HomeSections.projects: false,
+      HomeSections.skills: false,
+      HomeSections.experience: false,
+      HomeSections.contact: false,
+    };
     _scrollController = ScrollController()..addListener(_onScroll);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() => _heroVisible = true);
+      _updateRevealedSections();
+    });
   }
 
   void _scrollToSection(String section) {
@@ -80,6 +95,44 @@ class _HomePageState extends State<HomePage> {
     if (next != _hasScrolled) {
       setState(() => _hasScrolled = next);
     }
+
+    _updateRevealedSections();
+  }
+
+  void _updateRevealedSections() {
+    if (!mounted) return;
+
+    final viewportHeight = MediaQuery.sizeOf(context).height;
+    bool changed = false;
+
+    for (final section in _revealedSections.keys) {
+      if (_revealedSections[section] == true) continue;
+
+      final key = _sectionKeys[section];
+      if (key == null) continue;
+
+      if (_isSectionInRevealRange(key, viewportHeight)) {
+        _revealedSections[section] = true;
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      setState(() {});
+    }
+  }
+
+  bool _isSectionInRevealRange(GlobalKey key, double viewportHeight) {
+    final targetContext = key.currentContext;
+    if (targetContext == null) return false;
+
+    final renderBox = targetContext.findRenderObject() as RenderBox?;
+    if (renderBox == null || !renderBox.hasSize) return false;
+
+    final sectionTop = renderBox.localToGlobal(Offset.zero).dy;
+    final revealThreshold = viewportHeight * 0.88;
+
+    return sectionTop <= revealThreshold;
   }
 
   @override
@@ -117,9 +170,16 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           const SizedBox(height: _navBarHeight),
                           Expanded(
-                            child: HeroSection(
-                              onViewProjectsTap: () =>
-                                  _scrollToSection(HomeSections.projects),
+                            child: _AnimatedSectionReveal(
+                              visible: _heroVisible,
+                              beginOffset: const Offset(0, 0.06),
+                              duration: const Duration(milliseconds: 700),
+                              child: HeroSection(
+                                onViewProjectsTap: () =>
+                                    _scrollToSection(HomeSections.projects),
+                                onContactMeTap: () =>
+                                    _scrollToSection(HomeSections.contact),
+                              ),
                             ),
                           ),
                         ],
@@ -129,19 +189,42 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 // About / developer profile section
-                AboutDeveloperSection(key: _sectionKeys[HomeSections.about]),
+                _AnimatedSectionReveal(
+                  visible: _revealedSections[HomeSections.about] ?? false,
+                  child: AboutDeveloperSection(
+                    key: _sectionKeys[HomeSections.about],
+                  ),
+                ),
 
                 // Projects showcase section
-                ProjectsSection(key: _sectionKeys[HomeSections.projects]),
+                _AnimatedSectionReveal(
+                  visible: _revealedSections[HomeSections.projects] ?? false,
+                  child: ProjectsSection(
+                    key: _sectionKeys[HomeSections.projects],
+                  ),
+                ),
 
                 // Skills section
-                SkillsSection(key: _sectionKeys[HomeSections.skills]),
+                _AnimatedSectionReveal(
+                  visible: _revealedSections[HomeSections.skills] ?? false,
+                  child: SkillsSection(key: _sectionKeys[HomeSections.skills]),
+                ),
 
                 // Experience section
-                ExperienceSection(key: _sectionKeys[HomeSections.experience]),
+                _AnimatedSectionReveal(
+                  visible: _revealedSections[HomeSections.experience] ?? false,
+                  child: ExperienceSection(
+                    key: _sectionKeys[HomeSections.experience],
+                  ),
+                ),
 
                 // Contact section
-                ContactSection(key: _sectionKeys[HomeSections.contact]),
+                _AnimatedSectionReveal(
+                  visible: _revealedSections[HomeSections.contact] ?? false,
+                  child: ContactSection(
+                    key: _sectionKeys[HomeSections.contact],
+                  ),
+                ),
               ],
             ),
           ),
@@ -158,6 +241,35 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AnimatedSectionReveal extends StatelessWidget {
+  const _AnimatedSectionReveal({
+    required this.visible,
+    required this.child,
+    this.duration = const Duration(milliseconds: 600),
+    this.beginOffset = const Offset(0, 0.08),
+  });
+
+  final bool visible;
+  final Widget child;
+  final Duration duration;
+  final Offset beginOffset;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSlide(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      offset: visible ? Offset.zero : beginOffset,
+      child: AnimatedOpacity(
+        duration: duration,
+        curve: Curves.easeOutCubic,
+        opacity: visible ? 1 : 0,
+        child: child,
       ),
     );
   }

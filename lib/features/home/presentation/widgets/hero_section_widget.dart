@@ -9,9 +9,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 /// Full-height hero / landing section displayed below the navbar.
 class HeroSection extends StatelessWidget {
-  const HeroSection({super.key, required this.onViewProjectsTap});
+  const HeroSection({
+    super.key,
+    required this.onViewProjectsTap,
+    required this.onContactMeTap,
+  });
 
   final VoidCallback onViewProjectsTap;
+  final VoidCallback onContactMeTap;
 
   // ── Typed role strings ────────────────────────────────────────────────────
   static const List<String> _roles = [
@@ -78,6 +83,7 @@ class HeroSection extends StatelessWidget {
               _CtaButtons(
                 onViewProjectsTap: onViewProjectsTap,
                 onDownloadResumeTap: () => _handleResumeDownload(context),
+                onContactMeTap: onContactMeTap,
               ),
               const SizedBox(height: 40),
 
@@ -342,10 +348,12 @@ class _CtaButtons extends StatelessWidget {
   const _CtaButtons({
     required this.onViewProjectsTap,
     required this.onDownloadResumeTap,
+    required this.onContactMeTap,
   });
 
   final VoidCallback onViewProjectsTap;
   final VoidCallback onDownloadResumeTap;
+  final VoidCallback onContactMeTap;
 
   @override
   Widget build(BuildContext context) {
@@ -363,7 +371,7 @@ class _CtaButtons extends StatelessWidget {
           onTap: onDownloadResumeTap,
         ),
         // Contact Me – outlined
-        _OutlinedButton(label: 'Contact Me', onTap: () {}),
+        _OutlinedButton(label: 'Contact Me', onTap: onContactMeTap),
       ],
     );
   }
