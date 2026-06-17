@@ -168,7 +168,7 @@ class PortfolioDrawer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
               child: Text(
-                '© 2025 Ikram Shaikh',
+                '© 2026 Ikram Kolekar',
                 style: AppTextStyles.navLink.copyWith(
                   fontSize: 11,
                   color: AppColors.textMuted,

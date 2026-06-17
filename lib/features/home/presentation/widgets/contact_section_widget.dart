@@ -10,8 +10,8 @@ import 'package:url_launcher/url_launcher.dart';
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
-  static const String _email = 'ikramshaikh@email.com';
-  static const String _emailUrl = 'mailto:ikramshaikh@email.com';
+  static const String _email = 'ikramkolekar045@gmail.com';
+  static const String _emailUrl = 'mailto:ikramkolekar045@gmail.com';
   static const String _githubUrl = 'https://github.com/shaikhikram04';
   static const String _linkedInUrl =
       'https://www.linkedin.com/in/ikram-kolekar-95b5b0250';
